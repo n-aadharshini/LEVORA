@@ -1,0 +1,9 @@
+HELLO
+HELP
+YES
+NO
+STOP
+THANK YOU
+SORRY
+PLEASE
+background
