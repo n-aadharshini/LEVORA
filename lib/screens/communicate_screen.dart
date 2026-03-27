@@ -443,26 +443,32 @@ class _CommunicateScreenState extends State<CommunicateScreen>
   // ── Build ─────────────────────────────────────
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0A),
-      appBar: _buildAppBar(),
-      body: Column(
-        children: [
-          _buildTabBar(),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                _buildSignToTextTab(),
-                _buildSpeechToSignTab(),
-                _buildVideoCallTab(),
-              ],
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop) context.go('/home');
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFF0A0A0A),
+        appBar: _buildAppBar(),
+        body: Column(
+          children: [
+            _buildTabBar(),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  _buildSignToTextTab(),
+                  _buildSpeechToSignTab(),
+                  _buildVideoCallTab(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+        bottomNavigationBar: _buildBottomNav(1),
       ),
-      bottomNavigationBar: _buildBottomNav(1),
     );
   }
 
@@ -474,7 +480,7 @@ class _CommunicateScreenState extends State<CommunicateScreen>
       automaticallyImplyLeading: false,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back, color: Colors.white),
-        onPressed: () => context.go('/home'),
+        onPressed: () => context.pop(),
       ),
       title: Text(
         'Communicate',

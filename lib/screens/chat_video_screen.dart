@@ -70,38 +70,50 @@ class _ChatVideoScreenState extends State<ChatVideoScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop) context.go('/home');
+      },
+      child: Scaffold(
         backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go('/home'),
-        ),
-        title: Text(
-          'Caregiver Mode',
-          style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0A0A0A),
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => context.pop(),
           ),
-        ),
-        actions: [
-          const Icon(Icons.family_restroom, color: Color(0xFF1565C0), size: 28),
-          const SizedBox(width: 16),
-        ],
-      ),
-      body: Column(
-        children: [
-          _buildModeToggle(),
-          Expanded(
-            child: _isDeafMode ? _buildDeafPersonMode() : _buildCaregiverMode(),
+          title: Text(
+            'Caregiver Mode',
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
-        ],
+          actions: [
+            const Icon(
+              Icons.family_restroom,
+              color: Color(0xFF1565C0),
+              size: 28,
+            ),
+            const SizedBox(width: 16),
+          ],
+        ),
+        body: Column(
+          children: [
+            _buildModeToggle(),
+            Expanded(
+              child: _isDeafMode
+                  ? _buildDeafPersonMode()
+                  : _buildCaregiverMode(),
+            ),
+          ],
+        ),
+        bottomNavigationBar: _buildBottomNav(4),
       ),
-      bottomNavigationBar: _buildBottomNav(4),
     );
   }
 

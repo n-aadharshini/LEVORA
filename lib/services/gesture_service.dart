@@ -1,1 +1,69 @@
-﻿import "dart:typed_data"; import "package:flutter/foundation.dart"; import "package:flutter/material.dart"; import "package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart"; import "package:camera/camera.dart"; class GestureService { final PoseDetector _poseDetector = PoseDetector(options: PoseDetectorOptions(mode: PoseDetectionMode.stream,),); bool _isLoaded = false; bool get isLoaded => _isLoaded; Future<void> loadModel() async { _isLoaded = true; } InputImage? buildInputImage(CameraImage image, CameraDescription camera) { try { final WriteBuffer allBytes = WriteBuffer(); for (final plane in image.planes) { allBytes.putUint8List(plane.bytes); } final bytes = allBytes.done().buffer.asUint8List(); InputImageRotation rotation; switch (camera.sensorOrientation) { case 90: rotation = InputImageRotation.rotation90deg; break; case 180: rotation = InputImageRotation.rotation180deg; break; case 270: rotation = InputImageRotation.rotation270deg; break; default: rotation = InputImageRotation.rotation0deg; } final format = InputImageFormatValue.fromRawValue(image.format.raw); if (format == null) return null; final metadata = InputImageMetadata(size: Size(image.width.toDouble(), image.height.toDouble()), rotation: rotation, format: format, bytesPerRow: image.planes[0].bytesPerRow,); return InputImage.fromBytes(bytes: bytes, metadata: metadata); } catch (e) { return null; } } Future<List<Pose>> detectPose(InputImage inputImage) async { try { return await _poseDetector.processImage(inputImage); } catch (e) { return []; } } void dispose() { _poseDetector.close(); _isLoaded = false; } }
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:camera/camera.dart';
+
+class GestureService {
+  final PoseDetector _poseDetector = PoseDetector(
+    options: PoseDetectorOptions(mode: PoseDetectionMode.stream),
+  );
+
+  bool _isLoaded = false;
+  bool get isLoaded => _isLoaded;
+
+  Future<void> loadModel() async {
+    _isLoaded = true;
+    print("ML Kit ready");
+  }
+
+  InputImage? buildInputImage(CameraImage image, CameraDescription camera) {
+    try {
+      final WriteBuffer allBytes = WriteBuffer();
+      for (final plane in image.planes) {
+        allBytes.putUint8List(plane.bytes);
+      }
+      final bytes = allBytes.done().buffer.asUint8List();
+      InputImageRotation rotation;
+      switch (camera.sensorOrientation) {
+        case 90:
+          rotation = InputImageRotation.rotation90deg;
+          break;
+        case 180:
+          rotation = InputImageRotation.rotation180deg;
+          break;
+        case 270:
+          rotation = InputImageRotation.rotation270deg;
+          break;
+        default:
+          rotation = InputImageRotation.rotation0deg;
+      }
+      final format = InputImageFormatValue.fromRawValue(image.format.raw);
+      if (format == null) return null;
+      final metadata = InputImageMetadata(
+        size: Size(image.width.toDouble(), image.height.toDouble()),
+        rotation: rotation,
+        format: format,
+        bytesPerRow: image.planes[0].bytesPerRow,
+      );
+      return InputImage.fromBytes(bytes: bytes, metadata: metadata);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<List<Pose>> detectPose(InputImage inputImage) async {
+    try {
+      return await _poseDetector.processImage(inputImage);
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+  void dispose() {
+    _poseDetector.close();
+    _isLoaded = false;
+  }
+}

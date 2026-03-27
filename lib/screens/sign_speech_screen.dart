@@ -260,421 +260,429 @@ class _SignSpeechScreenState extends State<SignSpeechScreen>
   @override
   Widget build(BuildContext context) {
     final fullText = (_sentence + _currentWord).trim();
-    return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop) context.go('/home');
+      },
+      child: Scaffold(
         backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Text(
-          'Sign → Speech',
-          style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.flip_camera_android_outlined,
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0A0A0A),
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          title: Text(
+            'Sign → Speech',
+            style: GoogleFonts.poppins(
               color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
             ),
-            onPressed: () async {
-              await _cameraService.switchCamera();
-              if (mounted) setState(() {});
-            },
           ),
-        ],
-      ),
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              // ── Camera ──────────────────────
-              Container(
-                height: 220,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1A1A1A),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: _isDetecting
-                        ? const Color(0xFF00BCD4).withOpacity(0.6)
-                        : const Color(0xFF2A2A2A),
-                    width: 1.5,
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.flip_camera_android_outlined,
+                color: Colors.white,
+              ),
+              onPressed: () async {
+                await _cameraService.switchCamera();
+                if (mounted) setState(() {});
+              },
+            ),
+          ],
+        ),
+        body: FadeTransition(
+          opacity: _fadeAnimation,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                // ── Camera ──────────────────────
+                Container(
+                  height: 220,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1A1A1A),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: _isDetecting
+                          ? const Color(0xFF00BCD4).withOpacity(0.6)
+                          : const Color(0xFF2A2A2A),
+                      width: 1.5,
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        _cameraService.isInitialized
+                            ? CameraPreviewWidget(
+                                controller: _cameraService.controller!,
+                              )
+                            : Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.camera_alt_outlined,
+                                      color: Color(0xFF6B6B6B),
+                                      size: 40,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      'Camera loading...',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        color: const Color(0xFF6B6B6B),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                        Positioned(
+                          top: 12,
+                          left: 12,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.6),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: _isDetecting
+                                    ? const Color(0xFF00BCD4).withOpacity(0.5)
+                                    : Colors.transparent,
+                              ),
+                            ),
+                            child: Text(
+                              _isDetecting ? 'DETECTING' : 'PAUSED',
+                              style: GoogleFonts.poppins(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: _isDetecting
+                                    ? const Color(0xFF00BCD4)
+                                    : const Color(0xFF6B6B6B),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Stack(
-                    fit: StackFit.expand,
+
+                const SizedBox(height: 12),
+
+                // ── Detection Result ─────────────
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1A1A1A),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: _inCooldown
+                          ? const Color(0xFF69F0AE).withOpacity(0.4)
+                          : _currentSign.isNotEmpty
+                          ? const Color(0xFF00BCD4).withOpacity(0.3)
+                          : const Color(0xFF2A2A2A),
+                    ),
+                  ),
+                  child: Row(
                     children: [
-                      _cameraService.isInitialized
-                          ? CameraPreviewWidget(
-                              controller: _cameraService.controller!,
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: _inCooldown
+                              ? const Color(0xFF69F0AE).withOpacity(0.15)
+                              : const Color(0xFF00BCD4).withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          _inCooldown
+                              ? Icons.check_circle
+                              : Icons.sign_language,
+                          color: _inCooldown
+                              ? const Color(0xFF69F0AE)
+                              : const Color(0xFF00BCD4),
+                          size: 22,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _inCooldown
+                                  ? '$_currentSign added!'
+                                  : _currentSign.isEmpty
+                                  ? 'Show your hand...'
+                                  : _currentSign,
+                              style: GoogleFonts.poppins(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: _inCooldown
+                                    ? const Color(0xFF69F0AE)
+                                    : Colors.white,
+                              ),
+                            ),
+                            if (_currentSign.isNotEmpty && !_inCooldown) ...[
+                              const SizedBox(height: 4),
+                              LinearProgressIndicator(
+                                value: _sameSignCount / _confirmFrames,
+                                backgroundColor: const Color(0xFF2A2A2A),
+                                color: const Color(0xFF00BCD4),
+                                minHeight: 3,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Confirming...',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  color: const Color(0xFFB0BEC5),
+                                ),
+                              ),
+                            ],
+                            if (_inCooldown)
+                              Text(
+                                'Hold a new sign...',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  color: const Color(0xFFB0BEC5),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      if (_currentSign.isNotEmpty && !_inCooldown)
+                        Text(
+                          '${(_confidence * 100).toStringAsFixed(1)}%',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF00BCD4),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                // ── Output Box ────────────────────
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1A1A1A),
+                    borderRadius: BorderRadius.circular(16),
+                    border: const Border(
+                      left: BorderSide(color: Color(0xFF00BCD4), width: 3),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'OUTPUT',
+                            style: GoogleFonts.poppins(
+                              fontSize: 11,
+                              color: const Color(0xFF00BCD4),
+                              letterSpacing: 1.5,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '${fullText.length} chars',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  color: const Color(0xFF6B6B6B),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              GestureDetector(
+                                onTap: () {
+                                  Clipboard.setData(
+                                    ClipboardData(text: fullText),
+                                  );
+                                  HapticFeedback.lightImpact();
+                                },
+                                child: const Icon(
+                                  Icons.copy_outlined,
+                                  color: Color(0xFF6B6B6B),
+                                  size: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      fullText.isEmpty
+                          ? Text(
+                              'Start signing to build sentence...',
+                              style: GoogleFonts.poppins(
+                                fontSize: 15,
+                                color: const Color(0xFF6B6B6B),
+                              ),
                             )
-                          : Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                          : RichText(
+                              text: TextSpan(
                                 children: [
-                                  const Icon(
-                                    Icons.camera_alt_outlined,
-                                    color: Color(0xFF6B6B6B),
-                                    size: 40,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    'Camera loading...',
+                                  TextSpan(
+                                    text: _sentence,
                                     style: GoogleFonts.poppins(
-                                      fontSize: 12,
-                                      color: const Color(0xFF6B6B6B),
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: _currentWord,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 18,
+                                      color: const Color(0xFF00BCD4),
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                      Positioned(
-                        top: 12,
-                        left: 12,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.6),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: _isDetecting
-                                  ? const Color(0xFF00BCD4).withOpacity(0.5)
-                                  : Colors.transparent,
-                            ),
-                          ),
-                          child: Text(
-                            _isDetecting ? 'DETECTING' : 'PAUSED',
-                            style: GoogleFonts.poppins(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: _isDetecting
-                                  ? const Color(0xFF00BCD4)
-                                  : const Color(0xFF6B6B6B),
-                            ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 12),
+                const SizedBox(height: 14),
 
-              // ── Detection Result ─────────────
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                width: double.infinity,
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1A1A1A),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: _inCooldown
-                        ? const Color(0xFF69F0AE).withOpacity(0.4)
-                        : _currentSign.isNotEmpty
-                        ? const Color(0xFF00BCD4).withOpacity(0.3)
-                        : const Color(0xFF2A2A2A),
-                  ),
-                ),
-                child: Row(
+                // ── Row 1: Start + Speak ──────────
+                Row(
                   children: [
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: _inCooldown
-                            ? const Color(0xFF69F0AE).withOpacity(0.15)
-                            : const Color(0xFF00BCD4).withOpacity(0.12),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                        _inCooldown ? Icons.check_circle : Icons.sign_language,
-                        color: _inCooldown
-                            ? const Color(0xFF69F0AE)
-                            : const Color(0xFF00BCD4),
-                        size: 22,
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: _toggleDetection,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          decoration: BoxDecoration(
+                            color: _isDetecting
+                                ? const Color(0xFFFF5252)
+                                : const Color(0xFF00BCD4),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                _isDetecting ? Icons.stop : Icons.play_arrow,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                _isDetecting ? 'Stop' : 'Start',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _inCooldown
-                                ? '$_currentSign added!'
-                                : _currentSign.isEmpty
-                                ? 'Show your hand...'
-                                : _currentSign,
-                            style: GoogleFonts.poppins(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: _inCooldown
-                                  ? const Color(0xFF69F0AE)
-                                  : Colors.white,
-                            ),
+                      child: GestureDetector(
+                        onTap: fullText.isNotEmpty
+                            ? () => _speakText(fullText)
+                            : null,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          decoration: BoxDecoration(
+                            color: fullText.isNotEmpty
+                                ? const Color(0xFF7C4DFF)
+                                : const Color(0xFF2A2A2A),
+                            borderRadius: BorderRadius.circular(30),
                           ),
-                          if (_currentSign.isNotEmpty && !_inCooldown) ...[
-                            const SizedBox(height: 4),
-                            LinearProgressIndicator(
-                              value: _sameSignCount / _confirmFrames,
-                              backgroundColor: const Color(0xFF2A2A2A),
-                              color: const Color(0xFF00BCD4),
-                              minHeight: 3,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Confirming...',
-                              style: GoogleFonts.poppins(
-                                fontSize: 11,
-                                color: const Color(0xFFB0BEC5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.volume_up,
+                                color: Colors.white,
+                                size: 20,
                               ),
-                            ),
-                          ],
-                          if (_inCooldown)
-                            Text(
-                              'Hold a new sign...',
-                              style: GoogleFonts.poppins(
-                                fontSize: 11,
-                                color: const Color(0xFFB0BEC5),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Speak',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                        ],
-                      ),
-                    ),
-                    if (_currentSign.isNotEmpty && !_inCooldown)
-                      Text(
-                        '${(_confidence * 100).toStringAsFixed(1)}%',
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF00BCD4),
+                            ],
+                          ),
                         ),
                       ),
+                    ),
                   ],
                 ),
-              ),
 
-              const SizedBox(height: 12),
+                const SizedBox(height: 10),
 
-              // ── Output Box ────────────────────
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1A1A1A),
-                  borderRadius: BorderRadius.circular(16),
-                  border: const Border(
-                    left: BorderSide(color: Color(0xFF00BCD4), width: 3),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                // ── Row 2: Space, Delete, Clear ───
+                Row(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'OUTPUT',
-                          style: GoogleFonts.poppins(
-                            fontSize: 11,
-                            color: const Color(0xFF00BCD4),
-                            letterSpacing: 1.5,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '${fullText.length} chars',
-                              style: GoogleFonts.poppins(
-                                fontSize: 11,
-                                color: const Color(0xFF6B6B6B),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            GestureDetector(
-                              onTap: () {
-                                Clipboard.setData(
-                                  ClipboardData(text: fullText),
-                                );
-                                HapticFeedback.lightImpact();
-                              },
-                              child: const Icon(
-                                Icons.copy_outlined,
-                                color: Color(0xFF6B6B6B),
-                                size: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    Expanded(
+                      child: _buildOutlineBtn(
+                        Icons.space_bar,
+                        'Space',
+                        const Color(0xFF00BCD4),
+                        _addSpace,
+                      ),
                     ),
-                    const SizedBox(height: 8),
-                    fullText.isEmpty
-                        ? Text(
-                            'Start signing to build sentence...',
-                            style: GoogleFonts.poppins(
-                              fontSize: 15,
-                              color: const Color(0xFF6B6B6B),
-                            ),
-                          )
-                        : RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: _sentence,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 18,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: _currentWord,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 18,
-                                    color: const Color(0xFF00BCD4),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _buildOutlineBtn(
+                        Icons.backspace_outlined,
+                        'Delete',
+                        Colors.orange,
+                        _deleteLast,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _buildOutlineBtn(
+                        Icons.clear,
+                        'Clear',
+                        const Color(0xFFFF5252),
+                        _clearAll,
+                      ),
+                    ),
                   ],
                 ),
-              ),
 
-              const SizedBox(height: 14),
-
-              // ── Row 1: Start + Speak ──────────
-              Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: _toggleDetection,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        decoration: BoxDecoration(
-                          color: _isDetecting
-                              ? const Color(0xFFFF5252)
-                              : const Color(0xFF00BCD4),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              _isDetecting ? Icons.stop : Icons.play_arrow,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              _isDetecting ? 'Stop' : 'Start',
-                              style: GoogleFonts.poppins(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: fullText.isNotEmpty
-                          ? () => _speakText(fullText)
-                          : null,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        decoration: BoxDecoration(
-                          color: fullText.isNotEmpty
-                              ? const Color(0xFF7C4DFF)
-                              : const Color(0xFF2A2A2A),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.volume_up,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Speak',
-                              style: GoogleFonts.poppins(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 10),
-
-              // ── Row 2: Space, Delete, Clear ───
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildOutlineBtn(
-                      Icons.space_bar,
-                      'Space',
-                      const Color(0xFF00BCD4),
-                      _addSpace,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: _buildOutlineBtn(
-                      Icons.backspace_outlined,
-                      'Delete',
-                      Colors.orange,
-                      _deleteLast,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: _buildOutlineBtn(
-                      Icons.clear,
-                      'Clear',
-                      const Color(0xFFFF5252),
-                      _clearAll,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 80),
-            ],
+                const SizedBox(height: 80),
+              ],
+            ),
           ),
         ),
+        bottomNavigationBar: _buildBottomNav(1),
       ),
-      bottomNavigationBar: _buildBottomNav(1),
     );
   }
 

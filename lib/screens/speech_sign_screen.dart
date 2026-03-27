@@ -354,112 +354,118 @@ class _SpeechSignScreenState extends State<SpeechSignScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop) context.go('/home');
+      },
+      child: Scaffold(
         backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Text(
-          'Speech → Sign',
-          style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0A0A0A),
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          title: Text(
+            'Speech → Sign',
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline, color: Color(0xFFB0BEC5)),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => Dialog(
-                  backgroundColor: const Color(0xFF1A1A1A),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Icons.sign_language,
-                          color: Color(0xFF00BCD4),
-                          size: 40,
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'How to use',
-                          style: GoogleFonts.poppins(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.info_outline, color: Color(0xFFB0BEC5)),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => Dialog(
+                    backgroundColor: const Color(0xFF1A1A1A),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.sign_language,
+                            color: Color(0xFF00BCD4),
+                            size: 40,
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          '1. Tap the mic button and speak\n2. Or tap any quick phrase below\n3. See the sign and how to make it\n4. Practice the sign shown',
-                          style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            color: const Color(0xFFB0BEC5),
-                            height: 1.8,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        GestureDetector(
-                          onTap: () => Navigator.pop(context),
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF00BCD4),
-                              borderRadius: BorderRadius.circular(12),
+                          const SizedBox(height: 12),
+                          Text(
+                            'How to use',
+                            style: GoogleFonts.poppins(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
-                            child: Text(
-                              'Got it!',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.poppins(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            '1. Tap the mic button and speak\n2. Or tap any quick phrase below\n3. See the sign and how to make it\n4. Practice the sign shown',
+                            style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: const Color(0xFFB0BEC5),
+                              height: 1.8,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF00BCD4),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                'Got it!',
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              _buildMicSection(),
-              const SizedBox(height: 20),
-              if (_signToShow.isNotEmpty) ...[
-                _buildSignResult(),
+                );
+              },
+            ),
+          ],
+        ),
+        body: FadeTransition(
+          opacity: _fadeAnimation,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                _buildMicSection(),
                 const SizedBox(height: 20),
+                if (_signToShow.isNotEmpty) ...[
+                  _buildSignResult(),
+                  const SizedBox(height: 20),
+                ],
+                if (_recentPhrases.isNotEmpty) ...[
+                  _buildRecentPhrases(),
+                  const SizedBox(height: 20),
+                ],
+                _buildQuickPhrases(),
+                const SizedBox(height: 80),
               ],
-              if (_recentPhrases.isNotEmpty) ...[
-                _buildRecentPhrases(),
-                const SizedBox(height: 20),
-              ],
-              _buildQuickPhrases(),
-              const SizedBox(height: 80),
-            ],
+            ),
           ),
         ),
+        bottomNavigationBar: _buildBottomNav(1),
       ),
-      bottomNavigationBar: _buildBottomNav(1),
     );
   }
 

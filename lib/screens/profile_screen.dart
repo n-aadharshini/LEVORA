@@ -258,58 +258,64 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop) context.go('/home');
+      },
+      child: Scaffold(
         backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go('/home'),
-        ),
-        title: Text(
-          'Profile',
-          style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0A0A0A),
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => context.pop(),
           ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit_outlined, color: Color(0xFF00BCD4)),
-            onPressed: () => _showEditDialog(
-              'Name',
-              _name,
-              (v) => setState(() => _name = v),
+          title: Text(
+            'Profile',
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
             ),
           ),
-        ],
-      ),
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              _buildTopSection(),
-              const SizedBox(height: 20),
-              _buildStatsSection(),
-              const SizedBox(height: 20),
-              _buildEmergencyInfo(),
-              const SizedBox(height: 20),
-              _buildSettings(),
-              const SizedBox(height: 20),
-              _buildAchievements(),
-              const SizedBox(height: 20),
-              _buildLogout(),
-              const SizedBox(height: 80),
-            ],
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.edit_outlined, color: Color(0xFF00BCD4)),
+              onPressed: () => _showEditDialog(
+                'Name',
+                _name,
+                (v) => setState(() => _name = v),
+              ),
+            ),
+          ],
+        ),
+        body: FadeTransition(
+          opacity: _fadeAnimation,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                _buildTopSection(),
+                const SizedBox(height: 20),
+                _buildStatsSection(),
+                const SizedBox(height: 20),
+                _buildEmergencyInfo(),
+                const SizedBox(height: 20),
+                _buildSettings(),
+                const SizedBox(height: 20),
+                _buildAchievements(),
+                const SizedBox(height: 20),
+                _buildLogout(),
+                const SizedBox(height: 80),
+              ],
+            ),
           ),
         ),
+        bottomNavigationBar: _buildBottomNav(4),
       ),
-      bottomNavigationBar: _buildBottomNav(4),
     );
   }
 

@@ -66,104 +66,309 @@ class _LearnScreenState extends State<LearnScreen>
     'Animals': [
       {
         'name': 'CAT',
+        'emoji': '🐱',
         'how': 'Curl fingers like whiskers near cheeks',
         'fact': 'One of the most recognized animal signs!',
+        'steps': [
+          'Make a C shape near your cheek',
+          'Pull outward like cat whiskers',
+        ],
       },
       {
         'name': 'DOG',
+        'emoji': '🐶',
         'how': 'Pat thigh twice then snap fingers',
         'fact': 'Same sign used in both ASL and ISL!',
+        'steps': ['Pat your thigh twice', 'Then snap your fingers'],
       },
       {
         'name': 'ELEPHANT',
+        'emoji': '🐘',
         'how': 'Swing arm from nose like a trunk',
         'fact': 'A fun sign kids love to do!',
+        'steps': ['Place hand at nose', 'Swing arm downward like a trunk'],
       },
       {
         'name': 'BUTTERFLY',
+        'emoji': '🦋',
         'how': 'Cross wrists and flap hands like wings',
         'fact': 'Beautiful sign that looks like flying!',
+        'steps': [
+          'Cross both wrists together',
+          'Flap both hands like butterfly wings',
+        ],
       },
       {
         'name': 'FISH',
+        'emoji': '🐟',
         'how': 'Wave flat hand side to side like swimming',
         'fact': 'Mimics the movement of a fish!',
+        'steps': ['Hold flat hand out', 'Wave it side to side smoothly'],
+      },
+      {
+        'name': 'BIRD',
+        'emoji': '🐦',
+        'how': 'Open and close index finger and thumb near mouth like a beak',
+        'fact': 'Looks just like a bird beak opening!',
+        'steps': [
+          'Bring index finger and thumb to mouth',
+          'Open and close them like a beak',
+        ],
+      },
+      {
+        'name': 'RABBIT',
+        'emoji': '🐰',
+        'how': 'Hold up two fingers and wiggle them like bunny ears',
+        'fact': 'The wiggling fingers look just like floppy ears!',
+        'steps': [
+          'Hold up index and middle finger',
+          'Bend and wiggle them like rabbit ears',
+        ],
+      },
+      {
+        'name': 'LION',
+        'emoji': '🦁',
+        'how': 'Claw hand near face then sweep over head like mane',
+        'fact': 'The sweeping motion shows the lions mane!',
+        'steps': ['Make a claw shape near face', 'Sweep hand over top of head'],
+      },
+      {
+        'name': 'MONKEY',
+        'emoji': '🐒',
+        'how': 'Scratch sides with bent fingers like a monkey',
+        'fact': 'Mimics how monkeys scratch their sides!',
+        'steps': ['Bend fingers into claws', 'Scratch both sides of your body'],
+      },
+      {
+        'name': 'COW',
+        'emoji': '🐄',
+        'how': 'Y handshape twisted at temple like horns',
+        'fact': 'The Y shape represents cow horns!',
+        'steps': [
+          'Make Y handshape with pinky and thumb',
+          'Twist at your temple to show horns',
+        ],
       },
     ],
     'Colors': [
       {
         'name': 'RED',
+        'emoji': '🔴',
         'how': 'Point index finger to lips and move down',
         'fact': 'Red lips inspired this sign!',
+        'steps': ['Point index finger to your lips', 'Brush downward slightly'],
       },
       {
         'name': 'BLUE',
+        'emoji': '🔵',
         'how': 'Shake B hand at shoulder level',
         'fact': 'Letter B shaking = Blue!',
+        'steps': [
+          'Form letter B with fingers',
+          'Shake hand side to side at shoulder',
+        ],
       },
       {
         'name': 'GREEN',
+        'emoji': '🟢',
         'how': 'Shake G hand at shoulder level',
         'fact': 'Letter G shaking = Green!',
+        'steps': [
+          'Form letter G with thumb and index',
+          'Shake hand side to side',
+        ],
       },
       {
         'name': 'YELLOW',
+        'emoji': '🟡',
         'how': 'Shake Y hand at shoulder level',
         'fact': 'Letter Y shaking = Yellow!',
+        'steps': [
+          'Form Y shape with pinky and thumb',
+          'Shake at shoulder level',
+        ],
       },
       {
         'name': 'WHITE',
+        'emoji': '⬜',
         'how': 'Open hand on chest pull outward closing fingers',
         'fact': 'Like pulling something white from your heart!',
+        'steps': [
+          'Place open hand flat on chest',
+          'Pull outward while closing fingers',
+        ],
+      },
+      {
+        'name': 'BLACK',
+        'emoji': '⬛',
+        'how': 'Index finger brushes across forehead left to right',
+        'fact': 'Drawing a line across the brow!',
+        'steps': [
+          'Extend index finger',
+          'Brush across forehead from left to right',
+        ],
+      },
+      {
+        'name': 'ORANGE',
+        'emoji': '🟠',
+        'how': 'Squeeze fist near chin like squeezing an orange',
+        'fact': 'Mimics squeezing orange juice!',
+        'steps': ['Make a fist near chin', 'Open and close hand repeatedly'],
+      },
+      {
+        'name': 'PINK',
+        'emoji': '🌸',
+        'how': 'P handshape brushed down on lips',
+        'fact': 'Pink is shown near the lips just like red!',
+        'steps': [
+          'Form P with index and middle finger',
+          'Brush downward on lips',
+        ],
       },
     ],
     'Family': [
       {
         'name': 'MOM',
+        'emoji': '👩',
         'how': 'Touch chin with open hand fingers spread',
         'fact': 'Female signs are made near the chin!',
+        'steps': ['Spread all five fingers open', 'Tap thumb to chin twice'],
       },
       {
         'name': 'DAD',
+        'emoji': '👨',
         'how': 'Touch forehead with open hand fingers spread',
         'fact': 'Male signs are made near the forehead!',
+        'steps': [
+          'Spread all five fingers open',
+          'Tap thumb to forehead twice',
+        ],
       },
       {
         'name': 'SISTER',
+        'emoji': '👧',
         'how': 'Slide A hand along jaw from ear to chin',
         'fact': 'Combines female location with A handshape!',
+        'steps': [
+          'Make A handshape at ear level',
+          'Slide down along jawline to chin',
+        ],
       },
       {
         'name': 'BROTHER',
+        'emoji': '👦',
         'how': 'Slide A hand along forehead from ear to center',
         'fact': 'Male version of sister sign!',
+        'steps': [
+          'Make A handshape at ear level',
+          'Slide across forehead to center',
+        ],
       },
       {
         'name': 'FRIEND',
+        'emoji': '🤝',
         'how': 'Hook index fingers together and swap positions',
         'fact': 'Interlocking fingers = connected friends!',
+        'steps': ['Hook index fingers together', 'Flip hands and hook again'],
+      },
+      {
+        'name': 'BABY',
+        'emoji': '👶',
+        'how': 'Rock arms like cradling a baby',
+        'fact': 'Universal rocking motion for a baby!',
+        'steps': [
+          'Cross arms in front of body',
+          'Rock them gently side to side',
+        ],
+      },
+      {
+        'name': 'GRANDMA',
+        'emoji': '👵',
+        'how': 'Open 5 hand at chin move forward in two arcs',
+        'fact': 'Two arcs show the generation gap!',
+        'steps': [
+          'Open hand at chin with thumb touching',
+          'Move forward in two bouncing arcs',
+        ],
+      },
+      {
+        'name': 'GRANDPA',
+        'emoji': '👴',
+        'how': 'Open 5 hand at forehead move forward in two arcs',
+        'fact': 'Same as grandma but from forehead!',
+        'steps': [
+          'Open hand at forehead with thumb touching',
+          'Move forward in two bouncing arcs',
+        ],
       },
     ],
     'Feelings': [
       {
         'name': 'HAPPY',
+        'emoji': '😊',
         'how': 'Brush open hand upward on chest twice',
         'fact': 'Lifting motion shows positive feeling!',
+        'steps': ['Place flat hand on chest', 'Brush upward twice quickly'],
       },
       {
         'name': 'SAD',
+        'emoji': '😢',
         'how': 'Pull both hands slowly down face',
         'fact': 'Hands trace the path of tears!',
+        'steps': [
+          'Hold both open hands in front of face',
+          'Slowly pull them downward',
+        ],
       },
       {
         'name': 'ANGRY',
+        'emoji': '😠',
         'how': 'Claw both hands near face scrunch face',
         'fact': 'Tension in hands shows anger!',
+        'steps': [
+          'Claw both hands with bent fingers',
+          'Hold near face with tense expression',
+        ],
       },
       {
         'name': 'LOVE',
+        'emoji': '❤️',
         'how': 'Cross both arms over chest like a hug',
         'fact': 'Universal gesture for love!',
+        'steps': [
+          'Cross both arms over your chest',
+          'Hold or squeeze slightly',
+        ],
+      },
+      {
+        'name': 'SCARED',
+        'emoji': '😨',
+        'how': 'Both hands push toward chest quickly',
+        'fact': 'Hands rushing to protect the body!',
+        'steps': [
+          'Hold both hands out to sides',
+          'Quickly bring them to chest',
+        ],
+      },
+      {
+        'name': 'TIRED',
+        'emoji': '😴',
+        'how': 'Bent hands drop down from chest showing exhaustion',
+        'fact': 'The drooping shows energy draining away!',
+        'steps': [
+          'Hold bent open hands on chest',
+          'Let them drop downward with slumped shoulders',
+        ],
+      },
+      {
+        'name': 'EXCITED',
+        'emoji': '🤩',
+        'how': 'Alternating middle fingers brush up on chest',
+        'fact': 'The alternating motion shows bubbling excitement!',
+        'steps': [
+          'Extend middle fingers of both hands',
+          'Alternate brushing them up on chest',
+        ],
       },
     ],
   };
@@ -171,102 +376,267 @@ class _LearnScreenState extends State<LearnScreen>
   final List<Map<String, dynamic>> _islData = [
     {
       'name': 'NAMASTE',
+      'emoji': '🙏',
       'how': 'Press palms together in prayer position',
       'difficulty': 'Easy',
       'fact': 'The most universal Indian greeting!',
+      'steps': [
+        'Bring both palms together',
+        'Hold at chest level and bow slightly',
+      ],
     },
     {
       'name': 'CHAI',
+      'emoji': '☕',
       'how': 'Mime holding a small cup and drinking',
       'difficulty': 'Easy',
       'fact': 'Indias favorite beverage has its own sign!',
+      'steps': [
+        'Curl fingers like holding a small cup',
+        'Bring to lips and tilt like drinking',
+      ],
     },
     {
       'name': 'ROTI',
+      'emoji': '🫓',
       'how': 'Mime rolling dough with both hands',
       'difficulty': 'Easy',
       'fact': 'Rolling motion mimics making roti!',
+      'steps': [
+        'Place one palm on the other',
+        'Roll them in circular motion like dough',
+      ],
     },
     {
       'name': 'SCHOOL',
+      'emoji': '🏫',
       'how': 'Clap twice then hold flat hands parallel',
       'difficulty': 'Medium',
       'fact': 'ISL school sign is unique to India!',
+      'steps': [
+        'Clap hands twice',
+        'Hold both flat hands parallel facing each other',
+      ],
     },
     {
       'name': 'FAMILY',
+      'emoji': '👨‍👩‍👧',
       'how': 'F handshape in both hands circle forward',
       'difficulty': 'Medium',
       'fact': 'Circle represents togetherness of family!',
+      'steps': [
+        'Form F handshape with both hands',
+        'Move both hands in a circle forward',
+      ],
     },
     {
       'name': 'RUPEE',
+      'emoji': '₹',
       'how': 'R handshape brush down across palm',
       'difficulty': 'Easy',
       'fact': 'Unique to Indian Sign Language!',
+      'steps': [
+        'Make R handshape with crossed fingers',
+        'Brush downward across your open palm',
+      ],
     },
     {
       'name': 'TRAIN',
+      'emoji': '🚂',
       'how': 'Mime train moving on rails with both hands',
       'difficulty': 'Easy',
       'fact': 'Trains are central to Indian life!',
+      'steps': [
+        'Hold both hands flat like train tracks',
+        'Move one forward and back like train wheels',
+      ],
     },
     {
       'name': 'MARKET',
+      'emoji': '🛒',
       'how': 'Mime exchanging items between hands',
       'difficulty': 'Medium',
       'fact': 'Exchange gesture represents buying/selling!',
+      'steps': [
+        'Hold one item in each hand',
+        'Exchange them back and forth between hands',
+      ],
+    },
+    {
+      'name': 'INDIA',
+      'emoji': '🇮🇳',
+      'how': 'I handshape tapped on opposite palm twice',
+      'difficulty': 'Easy',
+      'fact': 'Simple and proud sign for our nation!',
+      'steps': [
+        'Form I handshape with pinky finger up',
+        'Tap it on your opposite open palm twice',
+      ],
+    },
+    {
+      'name': 'WATER',
+      'emoji': '💧',
+      'how': 'W handshape tapped to chin twice',
+      'difficulty': 'Easy',
+      'fact': 'Same in both ISL and ASL!',
+      'steps': [
+        'Form W with three fingers spread',
+        'Tap lightly to your chin twice',
+      ],
+    },
+    {
+      'name': 'FOOD',
+      'emoji': '🍛',
+      'how': 'Bring fingertips to mouth repeatedly',
+      'difficulty': 'Easy',
+      'fact': 'Universal sign understood everywhere!',
+      'steps': [
+        'Bring all fingertips together',
+        'Move toward mouth two to three times',
+      ],
+    },
+    {
+      'name': 'HOME',
+      'emoji': '🏠',
+      'how': 'Fingertips touch cheek twice moving back',
+      'difficulty': 'Easy',
+      'fact': 'Touching the face shows personal space!',
+      'steps': [
+        'Bring flat O fingertips to cheek',
+        'Tap cheek then move back slightly',
+      ],
     },
   ];
 
   final List<Map<String, dynamic>> _aslData = [
     {
       'name': 'HELLO',
+      'emoji': '👋',
       'how': 'Open hand wave from forehead outward',
       'difficulty': 'Easy',
       'fact': 'Like saluting with a wave!',
+      'steps': [
+        'Raise open hand to forehead',
+        'Wave it outward away from forehead',
+      ],
     },
     {
       'name': 'THANK YOU',
+      'emoji': '🙏',
       'how': 'Flat hand from chin moves forward and down',
       'difficulty': 'Easy',
       'fact': 'Blowing a kiss of gratitude!',
+      'steps': [
+        'Touch flat hand to your chin',
+        'Move hand forward and slightly downward',
+      ],
     },
     {
       'name': 'PLEASE',
+      'emoji': '🤲',
       'how': 'Flat hand circles clockwise on chest',
       'difficulty': 'Easy',
       'fact': 'Heart area = sincere request!',
+      'steps': ['Place flat open hand on chest', 'Move in clockwise circles'],
     },
     {
       'name': 'SORRY',
+      'emoji': '😔',
       'how': 'A handshape circles on chest',
       'difficulty': 'Easy',
       'fact': 'Fist over heart = sincere apology!',
+      'steps': [
+        'Make A handshape with closed fist',
+        'Circle fist on your chest',
+      ],
     },
     {
       'name': 'YES',
+      'emoji': '✅',
       'how': 'A handshape nods up and down',
       'difficulty': 'Easy',
       'fact': 'Like a nodding head!',
+      'steps': [
+        'Make A handshape with closed fist',
+        'Nod fist up and down like a head',
+      ],
     },
     {
       'name': 'NO',
+      'emoji': '❌',
       'how': 'Index and middle finger close onto thumb',
       'difficulty': 'Easy',
       'fact': 'Like a talking mouth saying NO!',
+      'steps': [
+        'Extend index and middle fingers with thumb out',
+        'Snap them down onto thumb',
+      ],
     },
     {
       'name': 'GOOD',
+      'emoji': '👍',
       'how': 'Flat hand from chin moves to other palm',
       'difficulty': 'Easy',
       'fact': 'Presenting goodness forward!',
+      'steps': [
+        'Touch flat hand to chin',
+        'Move it forward to land on other open palm',
+      ],
     },
     {
       'name': 'STOP',
+      'emoji': '✋',
       'how': 'Chop edge of hand onto other palm',
       'difficulty': 'Easy',
       'fact': 'Sharp chop = sharp stop!',
+      'steps': [
+        'Hold non-dominant hand flat palm up',
+        'Chop dominant hand edge onto it firmly',
+      ],
+    },
+    {
+      'name': 'HELP',
+      'emoji': '🆘',
+      'how': 'Thumb up fist on flat palm lift both up',
+      'difficulty': 'Easy',
+      'fact': 'Most important sign to know!',
+      'steps': [
+        'Place thumb up fist on flat open palm',
+        'Lift both hands upward together',
+      ],
+    },
+    {
+      'name': 'WATER',
+      'emoji': '💧',
+      'how': 'W handshape tapped to chin twice',
+      'difficulty': 'Easy',
+      'fact': 'W stands for Water!',
+      'steps': [
+        'Form W with three spread fingers',
+        'Tap lightly to chin twice',
+      ],
+    },
+    {
+      'name': 'I LOVE YOU',
+      'emoji': '🤟',
+      'how': 'Pinky index and thumb extended together',
+      'difficulty': 'Easy',
+      'fact': 'Most famous sign in the world!',
+      'steps': [
+        'Extend pinky, index finger and thumb',
+        'Hold up facing outward — thats it!',
+      ],
+    },
+    {
+      'name': 'MORE',
+      'emoji': '➕',
+      'how': 'Bring flat O hands together tapping fingertips',
+      'difficulty': 'Easy',
+      'fact': 'Gathering more together!',
+      'steps': [
+        'Make flat O with both hands',
+        'Tap fingertips of both hands together',
+      ],
     },
   ];
 
@@ -793,191 +1163,6 @@ class _LearnScreenState extends State<LearnScreen>
     _fadeController.forward();
   }
 
-  void _showSignDetail(Map<String, dynamic> sign) {
-    final isLearned = _learnedSigns.contains(sign['name']);
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: const Color(0xFF1A1A1A),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (context) => StatefulBuilder(
-        builder: (context, setModal) => Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF3A3A3A),
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                width: 72,
-                height: 72,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF00BCD4).withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Icon(
-                  Icons.sign_language,
-                  color: Color(0xFF00BCD4),
-                  size: 36,
-                ),
-              ),
-              const SizedBox(height: 14),
-              Text(
-                sign['name'],
-                style: GoogleFonts.poppins(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF252525),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'How to sign:',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: const Color(0xFF00BCD4),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      sign['how'] ?? '',
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        color: Colors.white,
-                      ),
-                    ),
-                    if (sign['fact'] != null) ...[
-                      const SizedBox(height: 10),
-                      Text(
-                        'Fun fact:',
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          color: const Color(0xFFFFD740),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        sign['fact'],
-                        style: GoogleFonts.poppins(
-                          fontSize: 13,
-                          color: const Color(0xFFB0BEC5),
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        HapticFeedback.lightImpact();
-                        _tts.speak(sign['name']);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF7C4DFF).withOpacity(0.15),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: const Color(0xFF7C4DFF).withOpacity(0.4),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.volume_up,
-                              color: Color(0xFF7C4DFF),
-                              size: 18,
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Speak',
-                              style: GoogleFonts.poppins(
-                                fontSize: 13,
-                                color: const Color(0xFF7C4DFF),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        if (!isLearned) {
-                          _markLearned(sign['name']);
-                          setModal(() {});
-                        }
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF69F0AE).withOpacity(0.12),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: const Color(0xFF69F0AE).withOpacity(0.4),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              isLearned
-                                  ? Icons.check_circle
-                                  : Icons.check_circle_outline,
-                              color: const Color(0xFF69F0AE),
-                              size: 18,
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              isLearned ? 'Learned!' : 'Mark Learned',
-                              style: GoogleFonts.poppins(
-                                fontSize: 13,
-                                color: const Color(0xFF69F0AE),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   void _openStory(Map<String, dynamic> story) {
     Navigator.push(
       context,
@@ -1060,73 +1245,105 @@ class _LearnScreenState extends State<LearnScreen>
                 itemBuilder: (context, i) {
                   final sign = (situation['signs'] as List)[i];
                   final isLearned = _learnedSigns.contains(sign['name']);
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                      _showSignDetail(sign);
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF252525),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: isLearned
-                              ? const Color(0xFF69F0AE).withOpacity(0.3)
-                              : const Color(0xFF2A2A2A),
-                        ),
+                  final color = situation['color'] as Color;
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF252525),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: isLearned
+                            ? const Color(0xFF69F0AE).withOpacity(0.3)
+                            : const Color(0xFF2A2A2A),
                       ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              color: (situation['color'] as Color).withOpacity(
-                                0.15,
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        _showSignAnimation(sign, color);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: color.withOpacity(0.15),
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              borderRadius: BorderRadius.circular(10),
+                              child: Icon(
+                                isLearned
+                                    ? Icons.check_circle
+                                    : Icons.sign_language,
+                                color:
+                                    isLearned ? const Color(0xFF69F0AE) : color,
+                                size: 20,
+                              ),
                             ),
-                            child: Icon(
-                              isLearned
-                                  ? Icons.check_circle
-                                  : Icons.sign_language,
-                              color: isLearned
-                                  ? const Color(0xFF69F0AE)
-                                  : situation['color'] as Color,
-                              size: 18,
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    sign['name'],
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Text(
+                                    sign['how'],
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 11,
+                                      color: const Color(0xFFB0BEC5),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  sign['name'],
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                            GestureDetector(
+                              onTap: () async {
+                                HapticFeedback.lightImpact();
+                                for (int k = 0; k < 3; k++) {
+                                  await _tts.speak(sign['name']);
+                                  await Future.delayed(
+                                    const Duration(milliseconds: 1200),
+                                  );
+                                }
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color(0xFF7C4DFF).withOpacity(0.15),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: const Color(0xFF7C4DFF)
+                                        .withOpacity(0.3),
                                   ),
                                 ),
-                                Text(
-                                  sign['how'],
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 11,
-                                    color: const Color(0xFFB0BEC5),
-                                  ),
+                                child: Column(
+                                  children: [
+                                    const Icon(Icons.volume_up,
+                                        color: Color(0xFF7C4DFF), size: 18),
+                                    Text('×3',
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 9,
+                                            color: const Color(0xFF7C4DFF),
+                                            fontWeight: FontWeight.bold)),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                          const Icon(
-                            Icons.arrow_forward_ios,
-                            color: Color(0xFF6B6B6B),
-                            size: 14,
-                          ),
-                        ],
+                            const SizedBox(width: 8),
+                            const Icon(Icons.play_circle_outline,
+                                color: Color(0xFF6B6B6B), size: 20),
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -1139,90 +1356,103 @@ class _LearnScreenState extends State<LearnScreen>
     );
   }
 
-  // ── Build ─────────────────────────────────────
+  void _showSignAnimation(Map<String, dynamic> sign, Color color) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1A1A1A),
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: _SignAnimationSheet(
+          sign: sign,
+          color: color,
+          tts: _tts,
+          onMarkLearned: () => _markLearned(sign['name']),
+          isLearned: _learnedSigns.contains(sign['name']),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop) context.go('/home');
+      },
+      child: Scaffold(
         backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go('/home'),
-        ),
-        title: Text(
-          'Learn & Sense',
-          style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0A0A0A),
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => context.pop(),
           ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings_outlined, color: Colors.white),
-            onPressed: () {},
+          title: Text(
+            'Learn & Sense',
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(28),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.local_fire_department,
-                  color: Colors.orange,
-                  size: 16,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  '$_streak Day Streak',
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    color: Colors.orange,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                const Icon(Icons.star_outline, color: Colors.amber, size: 16),
-                const SizedBox(width: 4),
-                Text(
-                  '$_xp XP',
-                  style: GoogleFonts.poppins(fontSize: 12, color: Colors.amber),
-                ),
-                const SizedBox(width: 16),
-                const Icon(
-                  Icons.check_circle_outline,
-                  color: Color(0xFF69F0AE),
-                  size: 16,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  '${_learnedSigns.length} Learned',
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    color: const Color(0xFF69F0AE),
-                  ),
-                ),
-              ],
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings_outlined, color: Colors.white),
+              onPressed: () {},
+            ),
+          ],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(28),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+              child: Row(
+                children: [
+                  const Icon(Icons.local_fire_department,
+                      color: Colors.orange, size: 16),
+                  const SizedBox(width: 4),
+                  Text('$_streak Day Streak',
+                      style: GoogleFonts.poppins(
+                          fontSize: 12, color: Colors.orange)),
+                  const SizedBox(width: 16),
+                  const Icon(Icons.star_outline, color: Colors.amber, size: 16),
+                  const SizedBox(width: 4),
+                  Text('$_xp XP',
+                      style: GoogleFonts.poppins(
+                          fontSize: 12, color: Colors.amber)),
+                  const SizedBox(width: 16),
+                  const Icon(Icons.check_circle_outline,
+                      color: Color(0xFF69F0AE), size: 16),
+                  const SizedBox(width: 4),
+                  Text('${_learnedSigns.length} Learned',
+                      style: GoogleFonts.poppins(
+                          fontSize: 12, color: const Color(0xFF69F0AE))),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      body: Column(
-        children: [
-          _buildCategoryScroll(),
-          Expanded(
-            child: FadeTransition(
-              opacity: _fadeAnimation,
-              child: _buildContent(),
+        body: Column(
+          children: [
+            _buildCategoryScroll(),
+            Expanded(
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: _buildContent(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+        bottomNavigationBar: _buildBottomNav(2),
       ),
-      bottomNavigationBar: _buildBottomNav(2),
     );
   }
 
@@ -1265,10 +1495,10 @@ class _LearnScreenState extends State<LearnScreen>
                       boxShadow: isSelected
                           ? [
                               BoxShadow(
-                                color: (cat['color'] as Color).withOpacity(0.3),
-                                blurRadius: 12,
-                                spreadRadius: 2,
-                              ),
+                                  color:
+                                      (cat['color'] as Color).withOpacity(0.3),
+                                  blurRadius: 12,
+                                  spreadRadius: 2)
                             ]
                           : [],
                     ),
@@ -1288,9 +1518,8 @@ class _LearnScreenState extends State<LearnScreen>
                       color: isSelected
                           ? cat['color'] as Color
                           : const Color(0xFF6B6B6B),
-                      fontWeight: isSelected
-                          ? FontWeight.w600
-                          : FontWeight.normal,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.normal,
                     ),
                   ),
                 ],
@@ -1321,7 +1550,6 @@ class _LearnScreenState extends State<LearnScreen>
     }
   }
 
-  // ── Progress Widget ───────────────────────────
   Widget _buildProgressWidget() {
     return Container(
       margin: const EdgeInsets.only(top: 16),
@@ -1340,19 +1568,15 @@ class _LearnScreenState extends State<LearnScreen>
               Text(
                 "You've learned ${_learnedSigns.length} signs today!",
                 style: GoogleFonts.poppins(
-                  fontSize: 13,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
+                    fontSize: 13,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500),
               ),
-              Text(
-                '$_xp XP',
-                style: GoogleFonts.poppins(
-                  fontSize: 13,
-                  color: Colors.amber,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              Text('$_xp XP',
+                  style: GoogleFonts.poppins(
+                      fontSize: 13,
+                      color: Colors.amber,
+                      fontWeight: FontWeight.w600)),
             ],
           ),
           const SizedBox(height: 8),
@@ -1367,177 +1591,21 @@ class _LearnScreenState extends State<LearnScreen>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '${_xp % 200}/200 XP to next level',
-                style: GoogleFonts.poppins(
-                  fontSize: 11,
-                  color: const Color(0xFFB0BEC5),
-                ),
-              ),
+              Text('${_xp % 200}/200 XP to next level',
+                  style: GoogleFonts.poppins(
+                      fontSize: 11, color: const Color(0xFFB0BEC5))),
               Row(
                 children: [
-                  const Icon(
-                    Icons.local_fire_department,
-                    color: Colors.orange,
-                    size: 14,
-                  ),
+                  const Icon(Icons.local_fire_department,
+                      color: Colors.orange, size: 14),
                   const SizedBox(width: 4),
-                  Text(
-                    '$_streak day streak',
-                    style: GoogleFonts.poppins(
-                      fontSize: 11,
-                      color: Colors.orange,
-                    ),
-                  ),
+                  Text('$_streak day streak',
+                      style: GoogleFonts.poppins(
+                          fontSize: 11, color: Colors.orange)),
                 ],
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  // ── Kids Section ──────────────────────────────
-  Widget _buildKidsSection() {
-    final subCat = _kidsSubCategories[_selectedSubCategory];
-    final signs = _kidsData[subCat] ?? [];
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Learn Signs for Kids',
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          Text(
-            'Fun signs for little hands',
-            style: GoogleFonts.poppins(
-              fontSize: 13,
-              color: const Color(0xFFB0BEC5),
-            ),
-          ),
-          const SizedBox(height: 14),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List.generate(_kidsSubCategories.length, (i) {
-                final isSelected = _selectedSubCategory == i;
-                return GestureDetector(
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                    setState(() => _selectedSubCategory = i);
-                  },
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? const Color(0xFF00BCD4)
-                          : const Color(0xFF1A1A1A),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: isSelected
-                            ? const Color(0xFF00BCD4)
-                            : const Color(0xFF2A2A2A),
-                      ),
-                    ),
-                    child: Text(
-                      _kidsSubCategories[i],
-                      style: GoogleFonts.poppins(
-                        fontSize: 13,
-                        color: isSelected
-                            ? Colors.white
-                            : const Color(0xFFB0BEC5),
-                        fontWeight: isSelected
-                            ? FontWeight.w600
-                            : FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            ),
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 180,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: signs.length,
-              itemBuilder: (context, i) {
-                final sign = signs[i];
-                final isLearned = _learnedSigns.contains(sign['name']);
-                return GestureDetector(
-                  onTap: () => _showSignDetail(sign),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    width: 130,
-                    margin: const EdgeInsets.only(right: 12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1A1A1A),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: isLearned
-                            ? const Color(0xFF69F0AE).withOpacity(0.5)
-                            : const Color(0xFF2A2A2A),
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF00BCD4).withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Icon(
-                            isLearned
-                                ? Icons.check_circle
-                                : Icons.sign_language,
-                            color: isLearned
-                                ? const Color(0xFF69F0AE)
-                                : const Color(0xFF00BCD4),
-                            size: 30,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          sign['name'],
-                          style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildBadge('+10 XP', const Color(0xFF00BCD4)),
-                            const SizedBox(width: 4),
-                            _buildBadge('Easy', const Color(0xFF69F0AE)),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          _buildProgressWidget(),
         ],
       ),
     );
@@ -1554,21 +1622,181 @@ class _LearnScreenState extends State<LearnScreen>
     );
   }
 
-  // ── ISL Section ───────────────────────────────
-  Widget _buildISLSection() {
+  // ── FIX: childAspectRatio changed from 0.85 → 0.72 to prevent bottom overflow ──
+  Widget _buildSignGrid({
+    required List<Map<String, dynamic>> signs,
+    required Color color,
+    String? badgeKey,
+    Color? badgeColor,
+  }) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.72, // ← FIXED: was 0.85, caused 18–19px overflow
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+      ),
+      itemCount: signs.length,
+      itemBuilder: (context, i) {
+        final sign = signs[i];
+        final isLearned = _learnedSigns.contains(sign['name']);
+        return GestureDetector(
+          onTap: () => _showSignAnimation(sign, color),
+          child: Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFF1A1A1A),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color:
+                    isLearned ? color.withOpacity(0.6) : color.withOpacity(0.2),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(16)),
+                  child: Container(
+                    height: 110,
+                    width: double.infinity,
+                    color: color.withOpacity(0.1),
+                    child: Center(
+                      child: Text(sign['emoji'] ?? '✋',
+                          style: const TextStyle(fontSize: 56)),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        sign['name'],
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        sign['how'],
+                        style: GoogleFonts.poppins(
+                            fontSize: 10, color: const Color(0xFFB0BEC5)),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 6),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          badgeKey != null && sign[badgeKey] != null
+                              ? _buildBadge(sign[badgeKey],
+                                  badgeColor ?? const Color(0xFF69F0AE))
+                              : Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                      color: color.withOpacity(0.15),
+                                      borderRadius: BorderRadius.circular(6)),
+                                  child: Text('+10 XP',
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 9, color: color)),
+                                ),
+                          isLearned
+                              ? Icon(Icons.check_circle, color: color, size: 16)
+                              : Icon(Icons.play_circle_outline,
+                                  color: color, size: 16),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildKidsSection() {
+    final subCat = _kidsSubCategories[_selectedSubCategory];
+    final signs = _kidsData[subCat] ?? [];
+    const color = Color(0xFFFFC107);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Indian Sign Language',
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+          Text('Learn Signs for Kids',
+              style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
+          Text('Tap any card to see the sign animation',
+              style: GoogleFonts.poppins(
+                  fontSize: 13, color: const Color(0xFFB0BEC5))),
+          const SizedBox(height: 14),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(_kidsSubCategories.length, (i) {
+                final isSelected = _selectedSubCategory == i;
+                return GestureDetector(
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    setState(() => _selectedSubCategory = i);
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    margin: const EdgeInsets.only(right: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isSelected ? color : const Color(0xFF1A1A1A),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                          color: isSelected ? color : const Color(0xFF2A2A2A)),
+                    ),
+                    child: Text(
+                      _kidsSubCategories[i],
+                      style: GoogleFonts.poppins(
+                        fontSize: 13,
+                        color:
+                            isSelected ? Colors.black : const Color(0xFFB0BEC5),
+                        fontWeight:
+                            isSelected ? FontWeight.w600 : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                );
+              }),
             ),
           ),
+          const SizedBox(height: 16),
+          _buildSignGrid(signs: signs, color: color),
+          _buildProgressWidget(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildISLSection() {
+    const color = Color(0xFFFF6D00);
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Indian Sign Language',
+              style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
           Container(
             height: 3,
             margin: const EdgeInsets.symmetric(vertical: 8),
@@ -1580,187 +1808,62 @@ class _LearnScreenState extends State<LearnScreen>
               ],
             ),
           ),
-          Text(
-            'Signs used across India',
-            style: GoogleFonts.poppins(
-              fontSize: 13,
-              color: const Color(0xFFB0BEC5),
-            ),
-          ),
+          Text('Tap any card to see the sign animation',
+              style: GoogleFonts.poppins(
+                  fontSize: 13, color: const Color(0xFFB0BEC5))),
           const SizedBox(height: 16),
-          ..._islData.map((sign) {
-            final isLearned = _learnedSigns.contains(sign['name']);
-            return GestureDetector(
-              onTap: () => _showSignDetail(sign),
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1A1A1A),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: isLearned
-                        ? const Color(0xFF69F0AE).withOpacity(0.3)
-                        : const Color(0xFF2A2A2A),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFF6D00).withOpacity(0.15),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                        isLearned ? Icons.check_circle : Icons.sign_language,
-                        color: isLearned
-                            ? const Color(0xFF69F0AE)
-                            : const Color(0xFFFF6D00),
-                        size: 22,
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            sign['name'],
-                            style: GoogleFonts.poppins(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Text(
-                            sign['how'],
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                              color: const Color(0xFFB0BEC5),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    _buildBadge(sign['difficulty'], const Color(0xFF69F0AE)),
-                  ],
-                ),
-              ),
-            );
-          }),
+          _buildSignGrid(
+              signs: _islData,
+              color: color,
+              badgeKey: 'difficulty',
+              badgeColor: const Color(0xFF69F0AE)),
           _buildProgressWidget(),
         ],
       ),
     );
   }
 
-  // ── ASL Section ───────────────────────────────
   Widget _buildASLSection() {
+    const color = Color(0xFF00BCD4);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'American Sign Language',
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          Text(
-            'International standard signs',
-            style: GoogleFonts.poppins(
-              fontSize: 13,
-              color: const Color(0xFFB0BEC5),
-            ),
-          ),
+          Text('American Sign Language',
+              style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
+          Text('Tap any card to see the sign animation',
+              style: GoogleFonts.poppins(
+                  fontSize: 13, color: const Color(0xFFB0BEC5))),
           const SizedBox(height: 16),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 1.4,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-            ),
-            itemCount: _aslData.length,
-            itemBuilder: (context, i) {
-              final sign = _aslData[i];
-              final isLearned = _learnedSigns.contains(sign['name']);
-              return GestureDetector(
-                onTap: () => _showSignDetail(sign),
-                child: Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1A1A1A),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: isLearned
-                          ? const Color(0xFF69F0AE).withOpacity(0.3)
-                          : const Color(0xFF2A2A2A),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        isLearned
-                            ? Icons.check_circle
-                            : Icons.sign_language_outlined,
-                        color: isLearned
-                            ? const Color(0xFF69F0AE)
-                            : const Color(0xFF00BCD4),
-                        size: 22,
-                      ),
-                      const Spacer(),
-                      Text(
-                        sign['name'],
-                        style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      _buildBadge(sign['difficulty'], const Color(0xFF69F0AE)),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
+          _buildSignGrid(
+              signs: _aslData,
+              color: color,
+              badgeKey: 'difficulty',
+              badgeColor: const Color(0xFF69F0AE)),
           _buildProgressWidget(),
         ],
       ),
     );
   }
 
-  // ── Situations Section ────────────────────────
   Widget _buildSituationsSection() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Real Life Situations',
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          Text(
-            'Learn signs for every situation',
-            style: GoogleFonts.poppins(
-              fontSize: 13,
-              color: const Color(0xFFB0BEC5),
-            ),
-          ),
+          Text('Real Life Situations',
+              style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
+          Text('Learn signs for every situation',
+              style: GoogleFonts.poppins(
+                  fontSize: 13, color: const Color(0xFFB0BEC5))),
           const SizedBox(height: 16),
           GridView.builder(
             shrinkWrap: true,
@@ -1786,8 +1889,7 @@ class _LearnScreenState extends State<LearnScreen>
                     color: const Color(0xFF1A1A1A),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: (sit['color'] as Color).withOpacity(0.3),
-                    ),
+                        color: (sit['color'] as Color).withOpacity(0.3)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1799,28 +1901,18 @@ class _LearnScreenState extends State<LearnScreen>
                           color: (sit['color'] as Color).withOpacity(0.15),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Icon(
-                          sit['icon'] as IconData,
-                          color: sit['color'] as Color,
-                          size: 20,
-                        ),
+                        child: Icon(sit['icon'] as IconData,
+                            color: sit['color'] as Color, size: 20),
                       ),
                       const Spacer(),
-                      Text(
-                        sit['name'],
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        '$total signs',
-                        style: GoogleFonts.poppins(
-                          fontSize: 11,
-                          color: const Color(0xFFB0BEC5),
-                        ),
-                      ),
+                      Text(sit['name'],
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                      Text('$total signs',
+                          style: GoogleFonts.poppins(
+                              fontSize: 11, color: const Color(0xFFB0BEC5))),
                       const SizedBox(height: 6),
                       LinearProgressIndicator(
                         value: total > 0 ? learnedCount / total : 0,
@@ -1830,13 +1922,9 @@ class _LearnScreenState extends State<LearnScreen>
                         borderRadius: BorderRadius.circular(2),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        '$learnedCount/$total learned',
-                        style: GoogleFonts.poppins(
-                          fontSize: 10,
-                          color: const Color(0xFF6B6B6B),
-                        ),
-                      ),
+                      Text('$learnedCount/$total learned',
+                          style: GoogleFonts.poppins(
+                              fontSize: 10, color: const Color(0xFF6B6B6B))),
                     ],
                   ),
                 ),
@@ -1849,28 +1937,20 @@ class _LearnScreenState extends State<LearnScreen>
     );
   }
 
-  // ── Stories Section ───────────────────────────
   Widget _buildStoriesSection() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Learn Through Stories',
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          Text(
-            'Signs in real conversations',
-            style: GoogleFonts.poppins(
-              fontSize: 13,
-              color: const Color(0xFFB0BEC5),
-            ),
-          ),
+          Text('Learn Through Stories',
+              style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
+          Text('Signs in real conversations',
+              style: GoogleFonts.poppins(
+                  fontSize: 13, color: const Color(0xFFB0BEC5))),
           const SizedBox(height: 16),
           ..._storiesData.map((story) {
             return GestureDetector(
@@ -1881,8 +1961,7 @@ class _LearnScreenState extends State<LearnScreen>
                   color: const Color(0xFF1A1A1A),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: (story['color'] as Color).withOpacity(0.3),
-                  ),
+                      color: (story['color'] as Color).withOpacity(0.3)),
                 ),
                 child: Column(
                   children: [
@@ -1891,46 +1970,34 @@ class _LearnScreenState extends State<LearnScreen>
                       decoration: BoxDecoration(
                         color: (story['color'] as Color).withOpacity(0.15),
                         borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(16),
-                        ),
+                            top: Radius.circular(16)),
                       ),
                       child: Row(
                         children: [
                           const SizedBox(width: 16),
-                          Icon(
-                            story['icon'] as IconData,
-                            color: story['color'] as Color,
-                            size: 28,
-                          ),
+                          Icon(story['icon'] as IconData,
+                              color: story['color'] as Color, size: 28),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: Text(
-                              story['title'],
-                              style: GoogleFonts.poppins(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
+                            child: Text(story['title'],
+                                style: GoogleFonts.poppins(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white)),
                           ),
                           Container(
                             margin: const EdgeInsets.only(right: 12),
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 3,
-                            ),
+                                horizontal: 8, vertical: 3),
                             decoration: BoxDecoration(
-                              color: (story['color'] as Color).withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              'STORY',
-                              style: GoogleFonts.poppins(
-                                fontSize: 10,
-                                color: story['color'] as Color,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                                color:
+                                    (story['color'] as Color).withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Text('STORY',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 10,
+                                    color: story['color'] as Color,
+                                    fontWeight: FontWeight.w600)),
                           ),
                         ],
                       ),
@@ -1940,89 +2007,59 @@ class _LearnScreenState extends State<LearnScreen>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Signs used:',
-                            style: GoogleFonts.poppins(
-                              fontSize: 11,
-                              color: const Color(0xFFB0BEC5),
-                            ),
-                          ),
+                          Text('Signs used:',
+                              style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  color: const Color(0xFFB0BEC5))),
                           const SizedBox(height: 6),
                           Wrap(
                             spacing: 6,
                             children: (story['signs'] as List<String>)
-                                .map(
-                                  (s) => Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 3,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFF252525),
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: const Color(0xFF3A3A3A),
+                                .map((s) => Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 3),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFF252525),
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                            color: const Color(0xFF3A3A3A)),
                                       ),
-                                    ),
-                                    child: Text(
-                                      s,
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 11,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                )
+                                      child: Text(s,
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 11,
+                                              color: Colors.white)),
+                                    ))
                                 .toList(),
                           ),
                           const SizedBox(height: 10),
                           Row(
                             children: [
-                              const Icon(
-                                Icons.schedule,
-                                color: Color(0xFF6B6B6B),
-                                size: 14,
-                              ),
+                              const Icon(Icons.schedule,
+                                  color: Color(0xFF6B6B6B), size: 14),
                               const SizedBox(width: 4),
-                              Text(
-                                story['time'],
-                                style: GoogleFonts.poppins(
-                                  fontSize: 12,
-                                  color: const Color(0xFF6B6B6B),
-                                ),
-                              ),
+                              Text(story['time'],
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12,
+                                      color: const Color(0xFF6B6B6B))),
                               const SizedBox(width: 16),
-                              const Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                                size: 14,
-                              ),
+                              const Icon(Icons.star,
+                                  color: Colors.amber, size: 14),
                               const SizedBox(width: 4),
-                              Text(
-                                '${story['xp']} XP',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 12,
-                                  color: Colors.amber,
-                                ),
-                              ),
+                              Text('${story['xp']} XP',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12, color: Colors.amber)),
                               const Spacer(),
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 14,
-                                  vertical: 6,
-                                ),
+                                    horizontal: 14, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF00BCD4),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text(
-                                  'Start Story',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 12,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
+                                    color: const Color(0xFF00BCD4),
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Text('Start Story',
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600)),
                               ),
                             ],
                           ),
@@ -2040,28 +2077,20 @@ class _LearnScreenState extends State<LearnScreen>
     );
   }
 
-  // ── SoundSense Section ────────────────────────
   Widget _buildSoundSenseSection() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Feel Your World',
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          Text(
-            'Sense sounds through vibration',
-            style: GoogleFonts.poppins(
-              fontSize: 13,
-              color: const Color(0xFFB0BEC5),
-            ),
-          ),
+          Text('Feel Your World',
+              style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
+          Text('Sense sounds through vibration',
+              style: GoogleFonts.poppins(
+                  fontSize: 13, color: const Color(0xFFB0BEC5))),
           const SizedBox(height: 16),
           GridView.builder(
             shrinkWrap: true,
@@ -2081,8 +2110,7 @@ class _LearnScreenState extends State<LearnScreen>
                   color: const Color(0xFF1A1A1A),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: (sound['color'] as Color).withOpacity(0.3),
-                  ),
+                      color: (sound['color'] as Color).withOpacity(0.3)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -2094,21 +2122,15 @@ class _LearnScreenState extends State<LearnScreen>
                         color: (sound['color'] as Color).withOpacity(0.15),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Icon(
-                        sound['icon'] as IconData,
-                        color: sound['color'] as Color,
-                        size: 20,
-                      ),
+                      child: Icon(sound['icon'] as IconData,
+                          color: sound['color'] as Color, size: 20),
                     ),
                     const Spacer(),
-                    Text(
-                      sound['name'],
-                      style: GoogleFonts.poppins(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    Text(sound['name'],
+                        style: GoogleFonts.poppins(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
                     const SizedBox(height: 8),
                     GestureDetector(
                       onTap: () => HapticFeedback.heavyImpact(),
@@ -2119,25 +2141,18 @@ class _LearnScreenState extends State<LearnScreen>
                           color: (sound['color'] as Color).withOpacity(0.15),
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: (sound['color'] as Color).withOpacity(0.4),
-                          ),
+                              color:
+                                  (sound['color'] as Color).withOpacity(0.4)),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
-                              Icons.vibration,
-                              size: 14,
-                              color: Colors.white,
-                            ),
+                            const Icon(Icons.vibration,
+                                size: 14, color: Colors.white),
                             const SizedBox(width: 4),
-                            Text(
-                              'Feel It',
-                              style: GoogleFonts.poppins(
-                                fontSize: 11,
-                                color: Colors.white,
-                              ),
-                            ),
+                            Text('Feel It',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 11, color: Colors.white)),
                           ],
                         ),
                       ),
@@ -2153,9 +2168,8 @@ class _LearnScreenState extends State<LearnScreen>
             decoration: BoxDecoration(
               color: const Color(0xFF1A1A1A),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: const Color(0xFFFF5252).withOpacity(0.3),
-              ),
+              border:
+                  Border.all(color: const Color(0xFFFF5252).withOpacity(0.3)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -2169,31 +2183,21 @@ class _LearnScreenState extends State<LearnScreen>
                         color: const Color(0xFFFF5252).withOpacity(0.15),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(
-                        Icons.explore,
-                        color: Color(0xFFFF5252),
-                        size: 20,
-                      ),
+                      child: const Icon(Icons.explore,
+                          color: Color(0xFFFF5252), size: 20),
                     ),
                     const SizedBox(width: 12),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Live Sound Compass',
-                          style: GoogleFonts.poppins(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          'Find where sounds come from',
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            color: const Color(0xFFB0BEC5),
-                          ),
-                        ),
+                        Text('Live Sound Compass',
+                            style: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                        Text('Find where sounds come from',
+                            style: GoogleFonts.poppins(
+                                fontSize: 12, color: const Color(0xFFB0BEC5))),
                       ],
                     ),
                   ],
@@ -2210,42 +2214,30 @@ class _LearnScreenState extends State<LearnScreen>
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF252525),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                      color: const Color(0xFF252525),
+                      borderRadius: BorderRadius.circular(12)),
                   child: Row(
                     children: [
-                      const Icon(
-                        Icons.directions_car,
-                        color: Color(0xFF90A4AE),
-                        size: 20,
-                      ),
+                      const Icon(Icons.directions_car,
+                          color: Color(0xFF90A4AE), size: 20),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: Text(
-                          'Probably a Car Honk (78%)',
-                          style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                          child: Text('Probably a Car Honk (78%)',
+                              style: GoogleFonts.poppins(
+                                  fontSize: 13, color: Colors.white))),
                       Container(
                         width: 80,
                         height: 6,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(3),
-                          color: const Color(0xFF2A2A2A),
-                        ),
+                            borderRadius: BorderRadius.circular(3),
+                            color: const Color(0xFF2A2A2A)),
                         child: FractionallySizedBox(
                           alignment: Alignment.centerLeft,
                           widthFactor: 0.78,
                           child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(3),
-                              color: const Color(0xFF00BCD4),
-                            ),
-                          ),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(3),
+                                  color: const Color(0xFF00BCD4))),
                         ),
                       ),
                     ],
@@ -2258,26 +2250,19 @@ class _LearnScreenState extends State<LearnScreen>
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFF5252),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                        color: const Color(0xFFFF5252),
+                        borderRadius: BorderRadius.circular(12)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
-                          Icons.explore,
-                          color: Colors.white,
-                          size: 18,
-                        ),
+                        const Icon(Icons.explore,
+                            color: Colors.white, size: 18),
                         const SizedBox(width: 8),
-                        Text(
-                          'Start Compass',
-                          style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        Text('Start Compass',
+                            style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ),
@@ -2291,7 +2276,6 @@ class _LearnScreenState extends State<LearnScreen>
     );
   }
 
-  // ── Bottom Nav ────────────────────────────────
   Widget _buildBottomNav(int activeIndex) {
     return Container(
       height: 70,
@@ -2302,50 +2286,25 @@ class _LearnScreenState extends State<LearnScreen>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          _buildNavItem(Icons.home_outlined, 'Home', activeIndex == 0,
+              () => context.go('/home')),
+          _buildNavItem(Icons.sign_language_outlined, 'Sign', activeIndex == 1,
+              () => context.go('/communicate')),
           _buildNavItem(
-            Icons.home_outlined,
-            'Home',
-            activeIndex == 0,
-            () => context.go('/home'),
-          ),
-          _buildNavItem(
-            Icons.sign_language_outlined,
-            'Sign',
-            activeIndex == 1,
-            () => context.go('/communicate'),
-          ),
-          _buildNavItem(
-            Icons.menu_book_outlined,
-            'Learn',
-            activeIndex == 2,
-            () {},
-          ),
-          _buildNavItem(
-            Icons.emergency_outlined,
-            'SOS',
-            activeIndex == 3,
-            () => context.go('/emergency'),
-            color: const Color(0xFFFF5252),
-          ),
-          _buildNavItem(
-            Icons.person_outline,
-            'Profile',
-            activeIndex == 4,
-            () => context.go('/profile'),
-          ),
+              Icons.menu_book_outlined, 'Learn', activeIndex == 2, () {}),
+          _buildNavItem(Icons.emergency_outlined, 'SOS', activeIndex == 3,
+              () => context.go('/emergency'),
+              color: const Color(0xFFFF5252)),
+          _buildNavItem(Icons.person_outline, 'Profile', activeIndex == 4,
+              () => context.go('/profile')),
         ],
       ),
     );
   }
 
-  // ── Nav Item ──────────────────────────────────
   Widget _buildNavItem(
-    IconData icon,
-    String label,
-    bool isActive,
-    VoidCallback onTap, {
-    Color? color,
-  }) {
+      IconData icon, String label, bool isActive, VoidCallback onTap,
+      {Color? color}) {
     final activeColor = color ?? const Color(0xFF00BCD4);
     return GestureDetector(
       onTap: () {
@@ -2357,11 +2316,9 @@ class _LearnScreenState extends State<LearnScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              color: isActive ? activeColor : const Color(0xFF6B6B6B),
-              size: 24,
-            ),
+            Icon(icon,
+                color: isActive ? activeColor : const Color(0xFF6B6B6B),
+                size: 24),
             const SizedBox(height: 4),
             Text(
               label,
@@ -2376,12 +2333,436 @@ class _LearnScreenState extends State<LearnScreen>
               duration: const Duration(milliseconds: 200),
               width: isActive ? 4 : 0,
               height: isActive ? 4 : 0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: activeColor,
-              ),
+              decoration:
+                  BoxDecoration(shape: BoxShape.circle, color: activeColor),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// SIGN ANIMATION SHEET
+// ══════════════════════════════════════════════════════
+class _SignAnimationSheet extends StatefulWidget {
+  final Map<String, dynamic> sign;
+  final Color color;
+  final FlutterTts tts;
+  final VoidCallback onMarkLearned;
+  final bool isLearned;
+
+  const _SignAnimationSheet({
+    required this.sign,
+    required this.color,
+    required this.tts,
+    required this.onMarkLearned,
+    required this.isLearned,
+  });
+
+  @override
+  State<_SignAnimationSheet> createState() => _SignAnimationSheetState();
+}
+
+class _SignAnimationSheetState extends State<_SignAnimationSheet>
+    with TickerProviderStateMixin {
+  late AnimationController _handController;
+  late Animation<double> _handAnimation;
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
+  bool _isAnimating = false;
+  int _currentStep = 0;
+  bool _learned = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _learned = widget.isLearned;
+    _handController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _handAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _handController, curve: Curves.easeInOut),
+    );
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    )..repeat(reverse: true);
+    _pulseAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+    Future.delayed(const Duration(milliseconds: 300), _playAnimation);
+  }
+
+  @override
+  void dispose() {
+    _handController.dispose();
+    _pulseController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _playAnimation() async {
+    if (_isAnimating) return;
+    setState(() {
+      _isAnimating = true;
+      _currentStep = 0;
+    });
+    HapticFeedback.lightImpact();
+    final steps = widget.sign['steps'] as List? ?? ['Step 1', 'Step 2'];
+    for (int i = 0; i < steps.length; i++) {
+      if (!mounted) return;
+      setState(() => _currentStep = i);
+      await _handController.forward();
+      await Future.delayed(const Duration(milliseconds: 500));
+      await _handController.reverse();
+      await Future.delayed(const Duration(milliseconds: 300));
+    }
+    if (mounted) setState(() => _isAnimating = false);
+  }
+
+  String _getHandEmoji(int step) {
+    final name = widget.sign['name'] as String? ?? '';
+    final Map<String, List<String>> handEmojis = {
+      'CAT': ['🖐️', '✋'],
+      'DOG': ['🤚', '🫰'],
+      'ELEPHANT': ['🤙', '👋'],
+      'BUTTERFLY': ['🙌', '👐'],
+      'FISH': ['🤲', '✋'],
+      'BIRD': ['🤏', '✌️'],
+      'RABBIT': ['✌️', '🖖'],
+      'LION': ['🦁', '🖐️'],
+      'MONKEY': ['🫱', '🫲'],
+      'COW': ['🤙', '🤙'],
+      'HELLO': ['👋', '🙋'],
+      'THANK YOU': ['🤲', '👋'],
+      'PLEASE': ['🤲', '🙏'],
+      'SORRY': ['✊', '🤜'],
+      'YES': ['✊', '👊'],
+      'NO': ['✌️', '🤞'],
+      'GOOD': ['🤲', '👍'],
+      'STOP': ['✋', '🖐️'],
+      'HELP': ['👍', '🙌'],
+      'WATER': ['🤟', '💧'],
+      'I LOVE YOU': ['🤟', '❤️'],
+      'MORE': ['🤌', '👌'],
+      'NAMASTE': ['🙏', '🙏'],
+      'CHAI': ['🫗', '☕'],
+      'HAPPY': ['😊', '🙌'],
+      'SAD': ['😢', '👐'],
+      'LOVE': ['🤗', '❤️'],
+      'PAIN': ['🤜', '💢'],
+      'ANGRY': ['😠', '👊'],
+      'ROTI': ['🤲', '🖐️'],
+      'SCHOOL': ['👏', '🤲'],
+      'FAMILY': ['🤟', '👨‍👩‍👧'],
+      'RUPEE': ['✌️', '✋'],
+      'TRAIN': ['🤲', '🚂'],
+      'MARKET': ['🤝', '🛒'],
+    };
+    final emojis = handEmojis[name] ?? ['✋', '🤚'];
+    return emojis[step % emojis.length];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final steps = widget.sign['steps'] as List? ?? [];
+    final emoji = widget.sign['emoji'] ?? '✋';
+
+    return DraggableScrollableSheet(
+      initialChildSize: 0.75,
+      minChildSize: 0.5,
+      maxChildSize: 0.95,
+      expand: false,
+      builder: (context, scrollController) => Container(
+        decoration: const BoxDecoration(
+          color: Color(0xFF1A1A1A),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: SingleChildScrollView(
+          controller: scrollController,
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF3A3A3A),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: widget.color.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Center(
+                      child: Text(emoji, style: const TextStyle(fontSize: 30)),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.sign['name'],
+                          style: GoogleFonts.poppins(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                        Text(
+                          widget.sign['how'] ?? '',
+                          style: GoogleFonts.poppins(
+                              fontSize: 12, color: const Color(0xFFB0BEC5)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              AnimatedBuilder(
+                animation: _pulseAnimation,
+                builder: (_, __) => Transform.scale(
+                  scale: _isAnimating ? _pulseAnimation.value : 1.0,
+                  child: Container(
+                    height: 160,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: widget.color.withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: widget.color.withOpacity(0.3)),
+                    ),
+                    child: AnimatedBuilder(
+                      animation: _handAnimation,
+                      builder: (_, __) => Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Transform.translate(
+                            offset: Offset(_handAnimation.value * 20 - 10,
+                                _handAnimation.value * -15),
+                            child: Text(
+                              _getHandEmoji(_currentStep),
+                              style: TextStyle(
+                                  fontSize: 60 + (_handAnimation.value * 10)),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          if (_isAnimating && steps.isNotEmpty)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: widget.color.withOpacity(0.15),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                'Step ${_currentStep + 1}: ${steps[_currentStep]}',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 11, color: widget.color),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          if (!_isAnimating)
+                            Text('Tap Play to see animation',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 12,
+                                    color: const Color(0xFF6B6B6B))),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              if (steps.isNotEmpty)
+                Row(
+                  children: List.generate(
+                    steps.length,
+                    (i) => Expanded(
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: (_isAnimating && _currentStep == i)
+                              ? widget.color
+                              : widget.color.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 14),
+              if (steps.isNotEmpty)
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF252525),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('How to sign:',
+                          style: GoogleFonts.poppins(
+                              fontSize: 11,
+                              color: widget.color,
+                              fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 8),
+                      ...List.generate(
+                          steps.length,
+                          (i) => Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 22,
+                                      height: 22,
+                                      decoration: BoxDecoration(
+                                          color: widget.color.withOpacity(0.15),
+                                          shape: BoxShape.circle),
+                                      child: Center(
+                                        child: Text('${i + 1}',
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 11,
+                                                color: widget.color,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                        child: Text(steps[i],
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 13,
+                                                color: Colors.white))),
+                                  ],
+                                ),
+                              )),
+                    ],
+                  ),
+                ),
+              if (widget.sign['fact'] != null) ...[
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFD740).withOpacity(0.08),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                        color: const Color(0xFFFFD740).withOpacity(0.2)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Text('💡', style: TextStyle(fontSize: 16)),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          widget.sign['fact'],
+                          style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              color: const Color(0xFFFFD740),
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: _playAnimation,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 13),
+                        decoration: BoxDecoration(
+                            color: widget.color,
+                            borderRadius: BorderRadius.circular(14)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(_isAnimating ? Icons.stop : Icons.play_arrow,
+                                color: Colors.white, size: 20),
+                            const SizedBox(width: 6),
+                            Text(
+                              _isAnimating ? 'Playing...' : 'Play Animation',
+                              style: GoogleFonts.poppins(
+                                  fontSize: 13,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      widget.tts.speak(widget.sign['name']);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(13),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF7C4DFF).withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                            color: const Color(0xFF7C4DFF).withOpacity(0.4)),
+                      ),
+                      child: const Icon(Icons.volume_up,
+                          color: Color(0xFF7C4DFF), size: 22),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () {
+                      if (!_learned) {
+                        widget.onMarkLearned();
+                        setState(() => _learned = true);
+                      }
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(13),
+                      decoration: BoxDecoration(
+                        color: _learned
+                            ? const Color(0xFF69F0AE).withOpacity(0.15)
+                            : const Color(0xFF252525),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                            color: _learned
+                                ? const Color(0xFF69F0AE).withOpacity(0.4)
+                                : const Color(0xFF3A3A3A)),
+                      ),
+                      child: Icon(
+                        _learned
+                            ? Icons.check_circle
+                            : Icons.check_circle_outline,
+                        color: _learned
+                            ? const Color(0xFF69F0AE)
+                            : const Color(0xFF6B6B6B),
+                        size: 22,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -2419,10 +2800,7 @@ class _StoryViewerScreenState extends State<StoryViewerScreen> {
         title: Text(
           widget.story['title'],
           style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
       body: Padding(
@@ -2462,56 +2840,36 @@ class _StoryViewerScreenState extends State<StoryViewerScreen> {
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        color: color.withOpacity(0.15),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        widget.story['icon'] as IconData,
-                        color: color,
-                        size: 40,
-                      ),
+                          color: color.withOpacity(0.15),
+                          shape: BoxShape.circle),
+                      child: Icon(widget.story['icon'] as IconData,
+                          color: color, size: 40),
                     ),
                     const SizedBox(height: 20),
-                    Text(
-                      'Scene ${_currentScene + 1}',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: const Color(0xFF6B6B6B),
-                      ),
-                    ),
+                    Text('Scene ${_currentScene + 1}',
+                        style: GoogleFonts.poppins(
+                            fontSize: 12, color: const Color(0xFF6B6B6B))),
                     const SizedBox(height: 8),
-                    Text(
-                      scene['scene'],
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        color: const Color(0xFFB0BEC5),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                    Text(scene['scene'],
+                        style: GoogleFonts.poppins(
+                            fontSize: 16, color: const Color(0xFFB0BEC5)),
+                        textAlign: TextAlign.center),
                     const SizedBox(height: 24),
-                    Text(
-                      scene['sign'],
-                      style: GoogleFonts.poppins(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF00BCD4),
-                      ),
-                    ),
+                    Text(scene['sign'],
+                        style: GoogleFonts.poppins(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF00BCD4))),
                     const SizedBox(height: 12),
                     Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF252525),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        scene['how'],
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+                          color: const Color(0xFF252525),
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Text(scene['how'],
+                          style: GoogleFonts.poppins(
+                              fontSize: 14, color: Colors.white),
+                          textAlign: TextAlign.center),
                     ),
                   ],
                 ),
@@ -2534,18 +2892,11 @@ class _StoryViewerScreenState extends State<StoryViewerScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
-                              Icons.arrow_back_ios,
-                              color: Colors.white,
-                              size: 16,
-                            ),
-                            Text(
-                              'Previous',
-                              style: GoogleFonts.poppins(
-                                fontSize: 14,
-                                color: Colors.white,
-                              ),
-                            ),
+                            const Icon(Icons.arrow_back_ios,
+                                color: Colors.white, size: 16),
+                            Text('Previous',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 14, color: Colors.white)),
                           ],
                         ),
                       ),
@@ -2565,9 +2916,8 @@ class _StoryViewerScreenState extends State<StoryViewerScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
+                          color: color,
+                          borderRadius: BorderRadius.circular(16)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -2576,10 +2926,9 @@ class _StoryViewerScreenState extends State<StoryViewerScreen> {
                                 ? 'Next Scene'
                                 : 'Finish Story',
                             style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(width: 6),
                           Icon(
@@ -2613,48 +2962,40 @@ class CompassPainter extends CustomPainter {
     final radius = size.width / 2;
 
     canvas.drawCircle(
-      center,
-      radius - 4,
-      Paint()
-        ..color = const Color(0xFF2A2A2A)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2,
-    );
+        center,
+        radius - 4,
+        Paint()
+          ..color = const Color(0xFF2A2A2A)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2);
     canvas.drawCircle(
-      center,
-      radius * 0.3,
-      Paint()
-        ..color = const Color(0xFFFF5252).withOpacity(0.2)
-        ..style = PaintingStyle.fill,
-    );
+        center,
+        radius * 0.3,
+        Paint()
+          ..color = const Color(0xFFFF5252).withOpacity(0.2)
+          ..style = PaintingStyle.fill);
     canvas.drawCircle(
-      center,
-      radius * 0.3,
-      Paint()
-        ..color = const Color(0xFFFF5252).withOpacity(0.5)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.5,
-    );
+        center,
+        radius * 0.3,
+        Paint()
+          ..color = const Color(0xFFFF5252).withOpacity(0.5)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5);
 
     final arrowPaint = Paint()
       ..color = const Color(0xFF00BCD4)
       ..strokeWidth = 3
       ..strokeCap = StrokeCap.round;
     canvas.drawLine(
-      center,
-      Offset(center.dx + radius * 0.6, center.dy),
-      arrowPaint,
-    );
+        center, Offset(center.dx + radius * 0.6, center.dy), arrowPaint);
     canvas.drawLine(
-      Offset(center.dx + radius * 0.6, center.dy),
-      Offset(center.dx + radius * 0.45, center.dy - radius * 0.12),
-      arrowPaint,
-    );
+        Offset(center.dx + radius * 0.6, center.dy),
+        Offset(center.dx + radius * 0.45, center.dy - radius * 0.12),
+        arrowPaint);
     canvas.drawLine(
-      Offset(center.dx + radius * 0.6, center.dy),
-      Offset(center.dx + radius * 0.45, center.dy + radius * 0.12),
-      arrowPaint,
-    );
+        Offset(center.dx + radius * 0.6, center.dy),
+        Offset(center.dx + radius * 0.45, center.dy + radius * 0.12),
+        arrowPaint);
 
     final textPainter = TextPainter(textDirection: TextDirection.ltr);
     for (final item in [
@@ -2666,16 +3007,13 @@ class CompassPainter extends CustomPainter {
       textPainter.text = TextSpan(
         text: item['label'] as String,
         style: const TextStyle(
-          color: Color(0xFF6B6B6B),
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-        ),
+            color: Color(0xFF6B6B6B),
+            fontSize: 12,
+            fontWeight: FontWeight.bold),
       );
       textPainter.layout();
       textPainter.paint(
-        canvas,
-        Offset(item['x'] as double, item['y'] as double),
-      );
+          canvas, Offset(item['x'] as double, item['y'] as double));
     }
   }
 

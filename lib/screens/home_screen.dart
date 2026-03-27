@@ -245,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 GestureDetector(
                   onTap: () {
                     HapticFeedback.lightImpact();
-                    context.go('/profile');
+                    context.push('/profile');
                   },
                   child: Container(
                     width: 46,
@@ -529,7 +529,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 subtitle: 'Sign to text and speech',
                 badge: 'ACTIVE',
                 badgeColor: const Color(0xFF00BCD4),
-                onTap: () => context.go('/communicate'),
+                onTap: () => context.push('/communicate'),
               ),
             ),
             const SizedBox(width: 10),
@@ -541,7 +541,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 subtitle: 'Signs, sounds & stories',
                 bottomLabel: '12 lessons',
                 bottomLabelColor: const Color(0xFF7C4DFF),
-                onTap: () => context.go('/learn'),
+                onTap: () => context.push('/learn'),
               ),
             ),
           ],
@@ -559,7 +559,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 title: 'Emergency SOS',
                 subtitle: 'Bystander Bridge',
                 showPulse: true,
-                onTap: () => context.go('/emergency'),
+                onTap: () => context.push('/emergency'),
               ),
             ),
             const SizedBox(width: 10),
@@ -569,7 +569,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 iconColor: const Color(0xFF1565C0),
                 title: 'Caregiver Mode',
                 subtitle: 'Live sign translation',
-                onTap: () => context.go('/chat-video'),
+                onTap: () => context.push('/chat-video'),
               ),
             ),
           ],
@@ -588,7 +588,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
-        context.go('/sound-textures');
+        context.push('/sound-textures');
       },
       child: Container(
         padding: const EdgeInsets.all(18),
@@ -994,7 +994,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             Icons.person_outline,
             'Profile',
             activeIndex == 4,
-            () => context.go('/profile'),
+            () => context.push('/profile'),
           ),
         ],
       ),
