@@ -11,15 +11,22 @@ plugins {
 android {
     namespace = "com.example.levora"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
+
+   androidResources {
+    noCompress += listOf("tflite")
+}
 
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+     isCoreLibraryDesugaringEnabled = true
 }
 
-kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_17.toString()
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
 }
     defaultConfig {
         ndk {
@@ -42,6 +49,10 @@ kotlinOptions {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
 
 flutter {

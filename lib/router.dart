@@ -44,9 +44,5 @@ final appRouter = GoRouter(
       path: '/profile',
       builder: (context, state) => const ProfileScreen(),
     ),
-    GoRoute(
-      path: '/sound-textures',
-      builder: (context, state) => const SoundTexturesScreen(),
-    ),
   ],
 );

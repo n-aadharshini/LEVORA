@@ -671,8 +671,8 @@ class _CommunicateScreenState extends State<CommunicateScreen>
                 color: _inCooldown
                     ? const Color(0xFF69F0AE).withOpacity(0.4)
                     : _currentSign.isNotEmpty
-                    ? const Color(0xFF00BCD4).withOpacity(0.3)
-                    : const Color(0xFF2A2A2A),
+                        ? const Color(0xFF00BCD4).withOpacity(0.3)
+                        : const Color(0xFF2A2A2A),
               ),
             ),
             child: Row(
@@ -704,8 +704,8 @@ class _CommunicateScreenState extends State<CommunicateScreen>
                         _inCooldown
                             ? '$_currentSign  added!'
                             : _currentSign.isEmpty
-                            ? 'Show your hand...'
-                            : _currentSign,
+                                ? 'Show your hand...'
+                                : _currentSign,
                         style: GoogleFonts.poppins(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -885,9 +885,8 @@ class _CommunicateScreenState extends State<CommunicateScreen>
               const SizedBox(width: 12),
               Expanded(
                 child: GestureDetector(
-                  onTap: fullText.isNotEmpty
-                      ? () => _speakText(fullText)
-                      : null,
+                  onTap:
+                      fullText.isNotEmpty ? () => _speakText(fullText) : null,
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 15),
                     decoration: BoxDecoration(
@@ -1046,11 +1045,10 @@ class _CommunicateScreenState extends State<CommunicateScreen>
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color:
-                              (_isListening
-                                      ? const Color(0xFFFF5252)
-                                      : const Color(0xFF00BCD4))
-                                  .withOpacity(0.4),
+                          color: (_isListening
+                                  ? const Color(0xFFFF5252)
+                                  : const Color(0xFF00BCD4))
+                              .withOpacity(0.4),
                           blurRadius: 24,
                           spreadRadius: 4,
                         ),
@@ -1087,13 +1085,12 @@ class _CommunicateScreenState extends State<CommunicateScreen>
               builder: (context, child) => Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(12, (i) {
-                  final height =
-                      10.0 +
+                  final height = 10.0 +
                       (i % 3 == 0
                           ? 30 * _waveAnimation.value
                           : i % 3 == 1
-                          ? 20 * _waveAnimation.value
-                          : 15 * _waveAnimation.value);
+                              ? 20 * _waveAnimation.value
+                              : 15 * _waveAnimation.value);
                   return Container(
                     margin: const EdgeInsets.symmetric(horizontal: 3),
                     width: 4,
@@ -1428,7 +1425,6 @@ class _CommunicateScreenState extends State<CommunicateScreen>
             ],
           ),
         ),
-
         Positioned(
           top: 16,
           right: 16,
@@ -1456,7 +1452,6 @@ class _CommunicateScreenState extends State<CommunicateScreen>
             ),
           ),
         ),
-
         Positioned(
           bottom: 100,
           left: 16,
@@ -1515,9 +1510,7 @@ class _CommunicateScreenState extends State<CommunicateScreen>
                       ],
                     ),
                     const SizedBox(height: 6),
-                    ..._subtitles
-                        .take(3)
-                        .map(
+                    ..._subtitles.take(3).map(
                           (s) => Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
@@ -1543,7 +1536,6 @@ class _CommunicateScreenState extends State<CommunicateScreen>
             ],
           ),
         ),
-
         Positioned(
           bottom: 20,
           left: 0,

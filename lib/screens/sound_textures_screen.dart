@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -7,8 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vibration/vibration.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:record/record.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SoundTexturesScreen extends StatefulWidget {
   const SoundTexturesScreen({super.key});
@@ -28,7 +29,7 @@ class _SoundTexturesScreenState extends State<SoundTexturesScreen>
   bool _isListening = false;
   double _currentDb = 0.0;
   double _peakDb = 0.0;
-  final List<double> _dbHistory = List.filled(30, 0.0);
+  final List<double> _dbHistory = List.generate(30, (_) => 0.0);
 
   // ── Detection State ─────────────────────────
   String _detectedSound = '';
@@ -36,182 +37,108 @@ class _SoundTexturesScreenState extends State<SoundTexturesScreen>
   Color _detectedColor = const Color(0xFF00BCD4);
   double _confidence = 0.0;
   bool _isVibrating = false;
+  bool _waitingForNoticed = false;
   Timer? _detectionCooldown;
   int _detectionCount = 0;
   int? _manualPlayIndex;
 
-  // ── YAMNet AI ────────────────────────────────
-  Interpreter? _interpreter;
-  List<String> _labels = [];
-  final AudioRecorder _audioRecorder = AudioRecorder();
-  bool _modelReady = false;
-  Timer? _recordingTimer;
-  StreamSubscription<Uint8List>? _audioStreamSub;
+  // ── Continuous vibration loop ────────────────
+  Timer? _vibrationLoopTimer;
 
-  // ── YAMNet index → sound profile name mapping ──
-  static const Map<int, String> _yamnetToProfile = {
-    195: 'Bell / Doorbell',
-    196: 'Bell / Doorbell',
-    349: 'Bell / Doorbell',
-    350: 'Bell / Doorbell',
-    197: 'Bell / Doorbell',
-    10: 'Kids Shouting',
-    11: 'Kids Shouting',
-    66: 'Kids Shouting',
-    9: 'Kids Shouting',
-    70: 'Dog Barking',
-    69: 'Dog Barking',
-    71: 'Dog Barking',
-    73: 'Dog Barking',
-    74: 'Dog Barking',
-    72: 'Dog Barking',
-    437: 'Breaking Glass',
-    435: 'Breaking Glass',
-    436: 'Breaking Glass',
-    464: 'Breaking Glass',
-    390: 'Emergency Siren',
-    391: 'Emergency Siren',
-    316: 'Emergency Siren',
-    317: 'Emergency Siren',
-    318: 'Emergency Siren',
-    319: 'Emergency Siren',
-    302: 'Car Honk',
-    303: 'Car Honk',
-    312: 'Car Honk',
-    304: 'Car Honk',
-    283: 'Rain / Water',
-    284: 'Rain / Water',
-    285: 'Rain / Water',
-    282: 'Rain / Water',
-    291: 'Rain / Water',
-    394: 'Fire Alarm',
-    393: 'Fire Alarm',
-    382: 'Fire Alarm',
-    392: 'Fire Alarm',
-    389: 'Fire Alarm',
-    58: 'Clapping',
-    62: 'Clapping',
-    63: 'Clapping',
-    57: 'Clapping',
-    132: 'Loud Music',
-    211: 'Loud Music',
-    214: 'Loud Music',
-    240: 'Loud Music',
-    157: 'Loud Music',
-    269: 'Loud Music',
-  };
+  // ── Audio ────────────────────────────────────
+  final AudioRecorder _audioRecorder = AudioRecorder();
+  Timer? _recordingTimer;
+  bool _isRecording = false;
+
+  // ── Pattern tracking for detection ──────────
+  final List<double> _recentDbReadings = [];
+  static const int _patternWindow = 5;
 
   // ── Sound Profiles ──────────────────────────
   final List<Map<String, dynamic>> _soundProfiles = [
     {
-      'name': 'Bell / Doorbell',
-      'emoji': '🔔',
-      'color': const Color(0xFFFFC107),
-      'description': 'Sharp ping-like repeated taps',
-      'minDb': 55.0,
-      'maxDb': 75.0,
-      'pattern': [100, 80, 100, 80, 100, 80, 100],
-      'intensities': [255, 0, 255, 0, 255, 0, 255],
-      'repeatCount': 2,
-    },
-    {
-      'name': 'Kids Shouting',
-      'emoji': '🧒',
-      'color': const Color(0xFFFF80AB),
-      'description': 'Irregular chaotic pulses',
-      'minDb': 70.0,
-      'maxDb': 88.0,
-      'pattern': [60, 30, 120, 20, 80, 40, 150, 10, 90, 50, 70],
-      'intensities': [180, 0, 255, 0, 150, 0, 255, 0, 200, 0, 160],
+      'name': 'Fire Alarm',
+      'emoji': '🔥',
+      'color': const Color(0xFFFF7043),
+      'description': 'Rapid urgent equal bursts',
+      // Short sharp equal blasts — classic alarm feel
+      'pattern': [1000, 200, 1000, 200, 1000, 200],
+      'intensities': [255, 0, 255, 0, 255, 0],
       'repeatCount': 1,
-    },
-    {
-      'name': 'Dog Barking',
-      'emoji': '🐕',
-      'color': const Color(0xFF8D6E63),
-      'description': 'Heavy thumps with long pauses',
-      'minDb': 65.0,
-      'maxDb': 85.0,
-      'pattern': [350, 250, 350, 250, 350],
-      'intensities': [255, 0, 255, 0, 255],
-      'repeatCount': 1,
-    },
-    {
-      'name': 'Breaking Glass',
-      'emoji': '🪟',
-      'color': const Color(0xFF64B5F6),
-      'description': 'One big crack then shimmer',
-      'minDb': 75.0,
-      'maxDb': 100.0,
-      'pattern': [600, 60, 40, 30, 25, 20, 15, 12, 10],
-      'intensities': [255, 0, 180, 120, 80, 60, 40, 25, 15],
-      'repeatCount': 1,
+      'dbMin': 80.0,
+      'dbMax': 120.0,
+      'varianceMin': 0.0,
+      'varianceMax': 999.0,
     },
     {
       'name': 'Emergency Siren',
       'emoji': '🚨',
       'color': const Color(0xFFFF5252),
       'description': 'Rising and falling wave',
-      'minDb': 80.0,
-      'maxDb': 100.0,
-      'pattern': [400, 200, 400, 200, 400, 200, 400],
-      'intensities': [50, 0, 120, 0, 200, 0, 255],
-      'repeatCount': 2,
+      // Slow ramp up then ramp down — wailing siren feel
+      'pattern': [100, 60, 200, 60, 350, 60, 500, 60, 350, 60, 200, 60, 100],
+      'intensities': [100, 0, 160, 0, 210, 0, 255, 0, 210, 0, 160, 0, 100],
+      'repeatCount': 1,
+      'dbMin': 70.0,
+      'dbMax': 79.9,
+      'varianceMin': 0.0,
+      'varianceMax': 999.0,
     },
     {
       'name': 'Car Honk',
       'emoji': '🚗',
       'color': const Color(0xFF90A4AE),
       'description': 'Two firm steady blasts',
-      'minDb': 70.0,
-      'maxDb': 90.0,
-      'pattern': [300, 150, 300],
+      // Two long strong blasts with a clear gap
+      'pattern': [500, 200, 500],
       'intensities': [255, 0, 255],
       'repeatCount': 1,
+      'dbMin': 66.0,
+      'dbMax': 69.9,
+      'varianceMin': 0.0,
+      'varianceMax': 999.0,
     },
     {
-      'name': 'Rain / Water',
-      'emoji': '🌧️',
-      'color': const Color(0xFF4FC3F7),
-      'description': 'Soft irregular light taps',
-      'minDb': 35.0,
-      'maxDb': 55.0,
-      'pattern': [40, 90, 25, 110, 35, 70, 30, 95, 45],
-      'intensities': [80, 0, 60, 0, 100, 0, 70, 0, 85],
-      'repeatCount': 2,
-    },
-    {
-      'name': 'Fire Alarm',
-      'emoji': '🔥',
-      'color': const Color(0xFFFF7043),
-      'description': 'Rapid urgent equal bursts',
-      'minDb': 85.0,
-      'maxDb': 110.0,
-      'pattern': [120, 80, 120, 80, 120, 80, 120, 80, 120],
-      'intensities': [255, 0, 255, 0, 255, 0, 255, 0, 255],
-      'repeatCount': 3,
-    },
-    {
-      'name': 'Clapping',
-      'emoji': '👏',
-      'color': const Color(0xFF69F0AE),
-      'description': 'Rhythmic repeated claps',
-      'minDb': 60.0,
-      'maxDb': 80.0,
-      'pattern': [150, 120, 150, 120, 150, 120],
-      'intensities': [200, 0, 200, 0, 200, 0],
-      'repeatCount': 2,
+      'name': 'Shouting / Crying',
+      'emoji': '🧒',
+      'color': const Color(0xFFFF80AB),
+      'description': 'Irregular chaotic pulses',
+      // Erratic uneven bursts — mimics crying rhythm
+      'pattern': [80, 40, 200, 30, 60, 50, 300, 20, 100, 60, 250, 30, 80],
+      'intensities': [200, 0, 255, 0, 180, 0, 255, 0, 220, 0, 255, 0, 190],
+      'repeatCount': 1,
+      'dbMin': 63.0,
+      'dbMax': 65.9,
+      'varianceMin': 0.0,
+      'varianceMax': 999.0,
     },
     {
       'name': 'Loud Music',
       'emoji': '🎵',
       'color': const Color(0xFF7C4DFF),
       'description': 'Strong steady bass beats',
-      'minDb': 75.0,
-      'maxDb': 95.0,
-      'pattern': [200, 100, 200, 100, 400, 100, 200, 100],
-      'intensities': [200, 0, 200, 0, 255, 0, 200, 0],
-      'repeatCount': 2,
+      // Four-on-the-floor kick drum pattern
+      'pattern': [300, 100, 300, 100, 300, 100, 600, 100],
+      'intensities': [220, 0, 220, 0, 220, 0, 255, 0],
+      'repeatCount': 1,
+      'dbMin': 72.0,
+      'dbMax': 79.9,
+      'varianceMin': 0.0,
+      'varianceMax': 999.0,
+    },
+    {
+      'name': 'Bell / Doorbell',
+      'emoji': '🔔',
+      'color': const Color(0xFFFFC107),
+      'description': 'Sharp ping then fade',
+      // Strong hit then two quick light taps — ding dong feel
+      'pattern': [400, 150, 150, 100, 100],
+      'intensities': [255, 0, 180, 0, 120],
+      'repeatCount': 1,
+      'dbMin': 50.0,
+      'dbMax': 62.9,
+      'varianceMin': 0.0,
+      'varianceMax': 999.0,
     },
   ];
 
@@ -232,7 +159,6 @@ class _SoundTexturesScreenState extends State<SoundTexturesScreen>
     _barAnimation = Tween<double>(begin: 0.7, end: 1.0).animate(
       CurvedAnimation(parent: _barController, curve: Curves.easeInOut),
     );
-    _loadYamnet();
   }
 
   @override
@@ -241,65 +167,16 @@ class _SoundTexturesScreenState extends State<SoundTexturesScreen>
     _barController.dispose();
     _stopListening();
     _detectionCooldown?.cancel();
-    _interpreter?.close();
+    _stopVibrationLoop();
     _audioRecorder.dispose();
     Vibration.cancel();
     super.dispose();
   }
 
-  // ══════════════════════════════════════════════
-  // YAMNET — Load model + labels
-  // ══════════════════════════════════════════════
-  Future<void> _loadYamnet() async {
-    try {
-      _interpreter = await Interpreter.fromAsset('assets/yamnet.tflite');
-      final raw = await rootBundle.loadString('assets/yamnet_labels.txt');
-      _labels = raw.split('\n').skip(1).map((line) {
-        final parts = line.split(',');
-        if (parts.length >= 3) {
-          return parts.sublist(2).join(',').replaceAll('"', '').trim();
-        }
-        return '';
-      }).toList();
-      setState(() => _modelReady = true);
-    } catch (e) {
-      debugPrint('YAMNet load error: $e');
-    }
-  }
-
-  // ══════════════════════════════════════════════
-  // YAMNET — Classify audio chunk
-  // ══════════════════════════════════════════════
-  Future<String?> _classifyAudio(Float32List audio) async {
-    if (_interpreter == null || _labels.isEmpty) return null;
-    try {
-      final input = [audio.sublist(0, min(15600, audio.length)).toList()];
-      final output = List.filled(521, 0.0).reshape([1, 521]);
-      _interpreter!.run(input, output);
-      final scores = List<double>.from(output[0]);
-      int topIndex = 0;
-      double topScore = 0.0;
-      for (int i = 0; i < scores.length; i++) {
-        if (scores[i] > topScore) {
-          topScore = scores[i];
-          topIndex = i;
-        }
-      }
-      if (topScore > 0.50 && _yamnetToProfile.containsKey(topIndex)) {
-        return _yamnetToProfile[topIndex];
-      }
-    } catch (e) {
-      debugPrint('classify error: $e');
-    }
-    return null;
-  }
-
-  // ══════════════════════════════════════════════
-  // dB calculation from raw PCM bytes
-  // ══════════════════════════════════════════════
-  double _calculateDb(List<int> bytes) {
-    if (bytes.length < 2) return 0.0;
-    final pcm = Uint8List.fromList(bytes).buffer.asInt16List();
+  double _calculateDb(Uint8List bytes, int headerSize) {
+    if (bytes.length <= headerSize + 2) return 0.0;
+    final pcm = bytes.buffer.asInt16List(headerSize);
+    if (pcm.isEmpty) return 0.0;
     double sum = 0;
     for (final s in pcm) {
       sum += s * s;
@@ -310,83 +187,164 @@ class _SoundTexturesScreenState extends State<SoundTexturesScreen>
     return db.clamp(0.0, 120.0);
   }
 
+  double _calculateVariance(List<double> values) {
+    if (values.length < 2) return 0.0;
+    final mean = values.reduce((a, b) => a + b) / values.length;
+    final variance =
+        values.map((v) => pow(v - mean, 2)).reduce((a, b) => a + b) /
+            values.length;
+    return variance;
+  }
+
+  Map<String, dynamic>? _classifySound(double avgDb, double variance) {
+    debugPrint(
+        '🔍 Classifying: avgDb=${avgDb.toStringAsFixed(1)} variance=${variance.toStringAsFixed(1)}');
+    if (avgDb < 45.0) return null;
+    for (final profile in _soundProfiles) {
+      final dbMin = profile['dbMin'] as double;
+      final dbMax = profile['dbMax'] as double;
+      if (avgDb >= dbMin && avgDb <= dbMax) {
+        final dbCenter = (dbMin + dbMax) / 2;
+        final score = 1.0 - (avgDb - dbCenter).abs() / ((dbMax - dbMin) / 2);
+        debugPrint(
+            '✅ Detected: ${profile['name']} (score: ${score.toStringAsFixed(2)})');
+        return {'profile': profile, 'score': score.clamp(0.0, 1.0)};
+      }
+    }
+    return null;
+  }
+
   // ══════════════════════════════════════════════
-  // Recording loop — captures audio, updates dB + classifies
+  // Continuous vibration loop
   // ══════════════════════════════════════════════
-  void _startYamnetLoop() {
+  void _startVibrationLoop(Map<String, dynamic> sound) {
+    _stopVibrationLoop();
+    if (mounted) setState(() => _waitingForNoticed = true);
+    _runVibrationCycle(sound);
+  }
+
+  void _runVibrationCycle(Map<String, dynamic> sound) async {
+    if (!_waitingForNoticed || !mounted) return;
+
+    if (mounted) setState(() => _isVibrating = true);
+
+    try {
+      await Vibration.vibrate(
+        pattern: [0, 1000, 200],
+        intensities: [0, 255, 0],
+        repeat: 0,
+      );
+    } catch (e) {
+      debugPrint('🔔 Vibration error: $e');
+      HapticFeedback.heavyImpact();
+    }
+  }
+
+  void _stopVibrationLoop() {
+    _vibrationLoopTimer?.cancel();
+    _vibrationLoopTimer = null;
+    Vibration.cancel();
+    if (mounted) {
+      setState(() {
+        _isVibrating = false;
+        _waitingForNoticed = false;
+      });
+    }
+  }
+
+  void _onNoticed() {
+    _stopVibrationLoop();
+  }
+
+  // ══════════════════════════════════════════════
+  // Recording loop
+  // ══════════════════════════════════════════════
+  void _startListeningLoop() {
     _recordingTimer?.cancel();
-    _recordingTimer = Timer.periodic(const Duration(seconds: 1), (_) async {
-      if (!_isListening || !_modelReady) return;
+    _recordingTimer = Timer.periodic(const Duration(seconds: 2), (_) async {
+      if (!_isListening) return;
       if (_detectionCooldown != null) return;
+      if (_isRecording) return;
+      if (_waitingForNoticed) return;
 
+      _isRecording = true;
       try {
-        if (!await _audioRecorder.hasPermission()) return;
+        final dir = await getTemporaryDirectory();
+        final filePath = '${dir.path}/chunk.wav';
 
-        final stream = await _audioRecorder.startStream(
+        await _audioRecorder.start(
           const RecordConfig(
             encoder: AudioEncoder.pcm16bits,
             sampleRate: 16000,
             numChannels: 1,
           ),
+          path: filePath,
         );
 
-        final bytes = <int>[];
-        _audioStreamSub = stream.listen((chunk) => bytes.addAll(chunk));
-        await Future.delayed(const Duration(milliseconds: 950));
-        await _audioStreamSub?.cancel();
+        await Future.delayed(const Duration(milliseconds: 1000));
         await _audioRecorder.stop();
 
         if (!mounted) return;
 
-        // Update dB meter from raw PCM
-        final db = _calculateDb(bytes);
-        setState(() {
-          _currentDb = db;
-          if (db > _peakDb) _peakDb = db;
-          _dbHistory.removeAt(0);
-          _dbHistory.add(db);
-        });
+        final file = File(filePath);
+        if (!await file.exists()) return;
 
-        if (bytes.length < 31200) return;
+        final bytes = await file.readAsBytes();
+        if (bytes.length < 1000) return;
 
-        // Convert PCM int16 → float32
-        final pcm = Uint8List.fromList(bytes).buffer.asInt16List();
-        final floats = Float32List(pcm.length);
-        for (int i = 0; i < pcm.length; i++) {
-          floats[i] = pcm[i] / 32768.0;
+        const headerSize = 46;
+        if (bytes.length <= headerSize) return;
+
+        final db = _calculateDb(bytes, headerSize);
+
+        _recentDbReadings.add(db);
+        if (_recentDbReadings.length > _patternWindow) {
+          _recentDbReadings.removeAt(0);
         }
 
-        final profileName = await _classifyAudio(floats);
-        if (profileName == null || !mounted) return;
+        if (mounted) {
+          setState(() {
+            _currentDb = db;
+            if (db > _peakDb) _peakDb = db;
+            _dbHistory.removeAt(0);
+            _dbHistory.add(db);
+          });
+        }
 
-        final profile = _soundProfiles.firstWhere(
-          (p) => p['name'] == profileName,
-          orElse: () => <String, dynamic>{},
-        );
-        if (profile.isEmpty) return;
+        if (_recentDbReadings.length < 3) return;
+
+        final avgDb = _recentDbReadings.reduce((a, b) => a + b) /
+            _recentDbReadings.length;
+        final variance = _calculateVariance(_recentDbReadings);
+
+        final result = _classifySound(avgDb, variance);
+        if (result == null || !mounted) return;
+
+        final profile = result['profile'] as Map<String, dynamic>;
+        final score = result['score'] as double;
 
         setState(() {
-          _detectedSound = profile['name'];
-          _detectedEmoji = profile['emoji'];
+          _detectedSound = profile['name'] as String;
+          _detectedEmoji = profile['emoji'] as String;
           _detectedColor = profile['color'] as Color;
-          _confidence = 0.65 + Random().nextDouble() * 0.30;
+          _confidence = score.clamp(0.0, 1.0);
           _detectionCount++;
         });
 
-        _playHapticPattern(profile);
+        _startVibrationLoop(profile);
 
-        _detectionCooldown = Timer(const Duration(seconds: 2), () {
+        _detectionCooldown = Timer(const Duration(seconds: 3), () {
           _detectionCooldown = null;
+          _recentDbReadings.clear();
         });
       } catch (e) {
         debugPrint('recording error: $e');
+      } finally {
+        _isRecording = false;
       }
     });
   }
 
-  // ══════════════════════════════════════════════
-  // Toggle listening
-  // ══════════════════════════════════════════════
   Future<void> _toggleListening() async {
     if (_isListening) {
       _stopListening();
@@ -414,17 +372,19 @@ class _SoundTexturesScreenState extends State<SoundTexturesScreen>
       _detectedSound = '';
       _currentDb = 0.0;
       _peakDb = 0.0;
+      _recentDbReadings.clear();
     });
 
-    _startYamnetLoop();
+    _startListeningLoop();
   }
 
   void _stopListening() {
-    _audioStreamSub?.cancel();
-    _audioStreamSub = null;
     _recordingTimer?.cancel();
     _recordingTimer = null;
+    _isRecording = false;
     _audioRecorder.stop();
+    _recentDbReadings.clear();
+    _stopVibrationLoop();
     if (mounted) {
       setState(() {
         _isListening = false;
@@ -436,62 +396,28 @@ class _SoundTexturesScreenState extends State<SoundTexturesScreen>
   }
 
   // ══════════════════════════════════════════════
-  // Haptic Engine
+  // Single play — for manual tile taps
   // ══════════════════════════════════════════════
   Future<void> _playHapticPattern(Map<String, dynamic> sound) async {
-    final hasVibrator = await Vibration.hasVibrator() ?? false;
-    if (!hasVibrator) return;
+    final hasVibrator = await Vibration.hasVibrator();
+    if (hasVibrator == null || !hasVibrator) return;
 
-    final hasAmplitude = await Vibration.hasAmplitudeControl() ?? false;
     final pattern = List<int>.from(sound['pattern'] as List);
     final intensities = List<int>.from(sound['intensities'] as List);
-    final repeatCount = sound['repeatCount'] as int;
 
-    List<int> fullPattern = [];
-    List<int> fullIntensities = [];
-    for (int r = 0; r < repeatCount; r++) {
-      fullPattern.addAll(pattern);
-      fullIntensities.addAll(intensities);
-      if (r < repeatCount - 1) {
-        fullPattern.add(300);
-        fullIntensities.add(0);
-      }
+    try {
+      await Vibration.vibrate(pattern: pattern, intensities: intensities);
+    } catch (e) {
+      debugPrint('🔔 Vibration failed: $e');
+      HapticFeedback.heavyImpact();
     }
-
-    if (mounted) setState(() => _isVibrating = true);
-
-    if (hasAmplitude) {
-      await Vibration.vibrate(
-        pattern: fullPattern,
-        intensities: fullIntensities,
-      );
-    } else {
-      for (int i = 0; i < fullPattern.length; i++) {
-        if (fullIntensities[i] > 0) {
-          if (fullIntensities[i] > 200) {
-            HapticFeedback.heavyImpact();
-          } else if (fullIntensities[i] > 100) {
-            HapticFeedback.mediumImpact();
-          } else {
-            HapticFeedback.lightImpact();
-          }
-        }
-        await Future.delayed(Duration(milliseconds: fullPattern[i]));
-      }
-    }
-
-    final totalMs = fullPattern.fold(0, (a, b) => a + b);
-    Future.delayed(Duration(milliseconds: totalMs), () {
-      if (mounted) setState(() => _isVibrating = false);
-    });
   }
 
   Future<void> _playManual(int index) async {
     setState(() => _manualPlayIndex = index);
     await _playHapticPattern(_soundProfiles[index]);
     final dur = (_soundProfiles[index]['pattern'] as List<int>)
-                .fold(0, (a, b) => a + b) *
-            (_soundProfiles[index]['repeatCount'] as int) +
+            .fold(0, (a, b) => a + b) +
         600;
     Future.delayed(Duration(milliseconds: dur), () {
       if (mounted) setState(() => _manualPlayIndex = null);
@@ -525,43 +451,20 @@ class _SoundTexturesScreenState extends State<SoundTexturesScreen>
                   color: Color(0xFFFF5252), size: 18),
             ),
             const SizedBox(width: 10),
-            Text(
-              'Sound Textures',
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
+            Flexible(
+              child: Text(
+                'Sound Textures',
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
         ),
         actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: const Color(0xFF1A1A1A),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFF2A2A2A)),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  _modelReady ? Icons.memory : Icons.hourglass_empty,
-                  color: _modelReady ? Colors.greenAccent : Colors.orange,
-                  size: 12,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  _modelReady ? 'AI Ready' : 'Loading...',
-                  style: GoogleFonts.poppins(
-                    fontSize: 10,
-                    color: _modelReady ? Colors.greenAccent : Colors.orange,
-                  ),
-                ),
-              ],
-            ),
-          ),
           if (_detectionCount > 0)
             Container(
               margin: const EdgeInsets.only(right: 16),
@@ -663,7 +566,7 @@ class _SoundTexturesScreenState extends State<SoundTexturesScreen>
                             ? [const Color(0xFFFF5252), const Color(0xFFB71C1C)]
                             : [
                                 const Color(0xFF00BCD4),
-                                const Color(0xFF0097A7)
+                                const Color(0xFF0097A7),
                               ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -701,8 +604,8 @@ class _SoundTexturesScreenState extends State<SoundTexturesScreen>
           const SizedBox(height: 4),
           Text(
             _isListening
-                ? 'AI is classifying sounds in real time'
-                : 'YAMNet AI identifies sounds and vibrates with their pattern',
+                ? 'Detecting sounds by volume and pattern'
+                : 'Detects surrounding sounds and vibrates with unique patterns',
             style: GoogleFonts.poppins(
                 fontSize: 12, color: const Color(0xFF6B6B6B)),
             textAlign: TextAlign.center,
@@ -840,7 +743,7 @@ class _SoundTexturesScreenState extends State<SoundTexturesScreen>
                     Row(
                       children: [
                         Text(
-                          'AI Detected',
+                          'Detected',
                           style: GoogleFonts.poppins(
                             fontSize: 11,
                             color: const Color(0xFFB0BEC5),
@@ -919,39 +822,85 @@ class _SoundTexturesScreenState extends State<SoundTexturesScreen>
             ],
           ),
           const SizedBox(height: 14),
-          GestureDetector(
-            onTap: () {
-              final profile = _soundProfiles.firstWhere(
-                (s) => s['name'] == _detectedSound,
-                orElse: () => _soundProfiles[0],
-              );
-              _playHapticPattern(profile);
-            },
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                color: _detectedColor.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: _detectedColor.withOpacity(0.4)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.vibration, color: _detectedColor, size: 18),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Feel this vibration again',
-                    style: GoogleFonts.poppins(
-                      fontSize: 13,
+
+          // ── "I Noticed" button — vibrates until tapped ──
+          if (_waitingForNoticed)
+            GestureDetector(
+              onTap: _onNoticed,
+              child: AnimatedBuilder(
+                animation: _pulseAnimation,
+                builder: (_, __) => Transform.scale(
+                  scale: 0.97 + _pulseAnimation.value * 0.03,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
                       color: _detectedColor,
-                      fontWeight: FontWeight.w600,
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: [
+                        BoxShadow(
+                          color: _detectedColor.withOpacity(0.6),
+                          blurRadius: 20,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.check_circle_rounded,
+                            color: Colors.white, size: 24),
+                        const SizedBox(width: 10),
+                        Text(
+                          'I Noticed',
+                          style: GoogleFonts.poppins(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+
+          // ── "Feel again" button — shows after noticed ──
+          if (!_waitingForNoticed)
+            GestureDetector(
+              onTap: () {
+                final profile = _soundProfiles.firstWhere(
+                  (s) => s['name'] == _detectedSound,
+                  orElse: () => _soundProfiles[0],
+                );
+                _startVibrationLoop(profile);
+              },
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: _detectedColor.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: _detectedColor.withOpacity(0.4)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.vibration, color: _detectedColor, size: 18),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Feel this vibration again',
+                      style: GoogleFonts.poppins(
+                        fontSize: 13,
+                        color: _detectedColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
         ],
       ),
     );

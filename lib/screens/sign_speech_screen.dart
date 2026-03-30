@@ -388,8 +388,8 @@ class _SignSpeechScreenState extends State<SignSpeechScreen>
                       color: _inCooldown
                           ? const Color(0xFF69F0AE).withOpacity(0.4)
                           : _currentSign.isNotEmpty
-                          ? const Color(0xFF00BCD4).withOpacity(0.3)
-                          : const Color(0xFF2A2A2A),
+                              ? const Color(0xFF00BCD4).withOpacity(0.3)
+                              : const Color(0xFF2A2A2A),
                     ),
                   ),
                   child: Row(
@@ -423,8 +423,8 @@ class _SignSpeechScreenState extends State<SignSpeechScreen>
                               _inCooldown
                                   ? '$_currentSign added!'
                                   : _currentSign.isEmpty
-                                  ? 'Show your hand...'
-                                  : _currentSign,
+                                      ? 'Show your hand...'
+                                      : _currentSign,
                               style: GoogleFonts.poppins(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
