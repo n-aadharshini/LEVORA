@@ -1,4 +1,6 @@
 import 'package:go_router/go_router.dart';
+import 'package:levora/screens/caregiver_mode.dart';
+import 'package:levora/scaffold_with_nav.dart'; // 👈 add this
 import 'screens/splash_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/communicate_screen.dart';
@@ -13,36 +15,31 @@ import 'screens/sound_textures_screen.dart';
 final appRouter = GoRouter(
   initialLocation: '/',
   routes: [
+    // No nav bar
     GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
-    GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
-    GoRoute(
-      path: '/communicate',
-      builder: (context, state) => const CommunicateScreen(),
+
+    // With nav bar (ShellRoute wraps these)
+    ShellRoute(
+      builder: (context, state, child) => ScaffoldWithNav(child: child),
+      routes: [
+        GoRoute(path: '/home', builder: (_, __) => const HomeScreen()),
+        GoRoute(
+            path: '/caregiver', builder: (_, __) => const CaregiverScreen()),
+        GoRoute(path: '/learn', builder: (_, __) => const LearnScreen()),
+        GoRoute(
+            path: '/emergency', builder: (_, __) => const EmergencyScreen()),
+        GoRoute(path: '/profile', builder: (_, __) => const ProfileScreen()),
+      ],
     ),
+
+    // No nav bar (detail/sub screens)
     GoRoute(
-      path: '/sign-speech',
-      builder: (context, state) => const SignSpeechScreen(),
-    ),
+        path: '/communicate', builder: (_, __) => const CommunicateScreen()),
+    GoRoute(path: '/sign-speech', builder: (_, __) => const SignSpeechScreen()),
+    GoRoute(path: '/speech-sign', builder: (_, __) => const SpeechSignScreen()),
+    GoRoute(path: '/chat-video', builder: (_, __) => const ChatVideoScreen()),
     GoRoute(
-      path: '/speech-sign',
-      builder: (context, state) => const SpeechSignScreen(),
-    ),
-    GoRoute(path: '/learn', builder: (context, state) => const LearnScreen()),
-    GoRoute(
-      path: '/emergency',
-      builder: (context, state) => const EmergencyScreen(),
-    ),
-    GoRoute(
-      path: '/chat-video',
-      builder: (context, state) => const ChatVideoScreen(),
-    ),
-    GoRoute(
-      path: '/sound-textures',
-      builder: (context, state) => const SoundTexturesScreen(),
-    ),
-    GoRoute(
-      path: '/profile',
-      builder: (context, state) => const ProfileScreen(),
-    ),
+        path: '/sound-textures',
+        builder: (_, __) => const SoundTexturesScreen()),
   ],
 );

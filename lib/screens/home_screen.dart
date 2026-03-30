@@ -103,7 +103,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
           ),
         ),
-        bottomNavigationBar: _buildBottomNav(0),
       ),
     );
   }
@@ -518,16 +517,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
         const SizedBox(height: 14),
 
-        // Row 1 — Sign Communicator + Learn & Sense
+        // Row 1 — SignCall + Learn & Sense
         Row(
           children: [
             Expanded(
               child: _buildFeatureCard(
-                icon: Icons.sign_language,
+                icon: Icons.video_call_rounded,
                 iconColor: const Color(0xFF00BCD4),
-                title: 'Sign Communicator',
-                subtitle: 'Sign to text and speech',
-                badge: 'ACTIVE',
+                title: 'SignCall',
+                subtitle: 'Live sign language video captions',
+                badge: 'LIVE',
                 badgeColor: const Color(0xFF00BCD4),
                 onTap: () => context.push('/communicate'),
               ),
@@ -569,7 +568,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 iconColor: const Color(0xFF1565C0),
                 title: 'Caregiver Mode',
                 subtitle: 'Live sign translation',
-                onTap: () => context.push('/chat-video'),
+                onTap: () => context.push('/communicate'),
               ),
             ),
           ],
@@ -843,9 +842,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             color: const Color(0xFFFF5252),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(
-                                  0xFFFF5252,
-                                ).withOpacity(_pulseAnimation.value * 0.6),
+                                color: const Color(0xFFFF5252)
+                                    .withOpacity(_pulseAnimation.value * 0.6),
                                 blurRadius: 8,
                                 spreadRadius: 2,
                               ),
@@ -955,97 +953,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
           const Icon(Icons.replay, color: Color(0xFF6B6B6B), size: 18),
         ],
-      ),
-    );
-  }
-
-  // ── Bottom Nav ────────────────────────────────
-  Widget _buildBottomNav(int activeIndex) {
-    return Container(
-      height: 70,
-      decoration: const BoxDecoration(
-        color: Color(0xFF0F0F0F),
-        border: Border(top: BorderSide(color: Color(0xFF2A2A2A), width: 1)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(Icons.home_outlined, 'Home', activeIndex == 0, () {}),
-          _buildNavItem(
-            Icons.sign_language_outlined,
-            'Sign',
-            activeIndex == 1,
-            () => context.go('/communicate'),
-          ),
-          _buildNavItem(
-            Icons.menu_book_outlined,
-            'Learn',
-            activeIndex == 2,
-            () => context.go('/learn'),
-          ),
-          _buildNavItem(
-            Icons.emergency_outlined,
-            'SOS',
-            activeIndex == 3,
-            () => context.go('/emergency'),
-            color: const Color(0xFFFF5252),
-          ),
-          _buildNavItem(
-            Icons.person_outline,
-            'Profile',
-            activeIndex == 4,
-            () => context.push('/profile'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ── Nav Item ──────────────────────────────────
-  Widget _buildNavItem(
-    IconData icon,
-    String label,
-    bool isActive,
-    VoidCallback onTap, {
-    Color? color,
-  }) {
-    final activeColor = color ?? const Color(0xFF00BCD4);
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        onTap();
-      },
-      child: SizedBox(
-        width: 64,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              color: isActive ? activeColor : const Color(0xFF6B6B6B),
-              size: 24,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: GoogleFonts.poppins(
-                fontSize: 10,
-                color: isActive ? activeColor : const Color(0xFF6B6B6B),
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-              ),
-            ),
-            const SizedBox(height: 3),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              width: isActive ? 4 : 0,
-              height: isActive ? 4 : 0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: activeColor,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

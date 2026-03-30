@@ -659,7 +659,13 @@ class _EmergencyScreenState extends State<EmergencyScreen>
           automaticallyImplyLeading: false,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => context.pop(),
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go('/home');
+              }
+            },
           ),
           title: Text(
             'Emergency SOS',
@@ -695,7 +701,6 @@ class _EmergencyScreenState extends State<EmergencyScreen>
             ],
           ),
         ),
-        bottomNavigationBar: _buildBottomNav(3),
       ),
     );
   }

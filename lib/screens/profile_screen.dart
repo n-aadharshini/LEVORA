@@ -271,7 +271,13 @@ class _ProfileScreenState extends State<ProfileScreen>
           automaticallyImplyLeading: false,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => context.pop(),
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go('/home');
+              }
+            },
           ),
           title: Text(
             'Profile',
@@ -314,7 +320,6 @@ class _ProfileScreenState extends State<ProfileScreen>
             ),
           ),
         ),
-        bottomNavigationBar: _buildBottomNav(4),
       ),
     );
   }
@@ -758,8 +763,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                       _ttsSpeed < 0.4
                           ? 'Slow'
                           : _ttsSpeed < 0.7
-                          ? 'Normal'
-                          : 'Fast',
+                              ? 'Normal'
+                              : 'Fast',
                       style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: const Color(0xFF00BCD4),
@@ -815,8 +820,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                       _vibrationIntensity < 0.4
                           ? 'Low'
                           : _vibrationIntensity < 0.7
-                          ? 'Medium'
-                          : 'High',
+                              ? 'Medium'
+                              : 'High',
                       style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: const Color(0xFF7C4DFF),
