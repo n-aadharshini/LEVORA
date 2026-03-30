@@ -512,11 +512,10 @@ class _SpeechSignScreenState extends State<SpeechSignScreen>
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color:
-                            (_isListening
-                                    ? const Color(0xFFFF5252)
-                                    : const Color(0xFF00BCD4))
-                                .withOpacity(0.4),
+                        color: (_isListening
+                                ? const Color(0xFFFF5252)
+                                : const Color(0xFF00BCD4))
+                            .withOpacity(0.4),
                         blurRadius: 24,
                         spreadRadius: 4,
                       ),
@@ -549,15 +548,14 @@ class _SpeechSignScreenState extends State<SpeechSignScreen>
             builder: (context, child) => Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(14, (i) {
-                final h =
-                    8.0 +
+                final h = 8.0 +
                     (i % 4 == 0
                         ? 32 * _waveAnimation.value
                         : i % 4 == 1
-                        ? 22 * _waveAnimation.value
-                        : i % 4 == 2
-                        ? 16 * _waveAnimation.value
-                        : 10 * _waveAnimation.value);
+                            ? 22 * _waveAnimation.value
+                            : i % 4 == 2
+                                ? 16 * _waveAnimation.value
+                                : 10 * _waveAnimation.value);
                 return Container(
                   margin: const EdgeInsets.symmetric(horizontal: 2.5),
                   width: 4,
