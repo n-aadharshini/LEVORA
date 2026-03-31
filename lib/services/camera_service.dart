@@ -1,65 +1,85 @@
 import 'package:camera/camera.dart';
-import 'package:flutter/material.dart';
 
 class CameraService {
   CameraController? _controller;
   List<CameraDescription> _cameras = [];
-  bool _isInitialized = false;
+  int _selectedCameraIndex = 0;
+  bool _isStreamingImages = false;
 
-  bool get isInitialized => _isInitialized;
   CameraController? get controller => _controller;
+  bool get isInitialized => _controller?.value.isInitialized ?? false;
+  bool get isStreamingImages => _isStreamingImages;
 
   Future<void> initialize() async {
-    try {
-      _cameras = await availableCameras();
-      if (_cameras.isEmpty) return;
+    _cameras = await availableCameras();
 
-      // Use front camera (index 1) for gesture detection
-      final camera = _cameras.length > 1 ? _cameras[1] : _cameras[0];
-
-      _controller = CameraController(
-        camera,
-        ResolutionPreset.medium,
-        enableAudio: false,
-      );
-
-      await _controller!.initialize();
-      _isInitialized = true;
-    } catch (e) {
-      debugPrint('Camera error: $e');
+    if (_cameras.isEmpty) {
+      throw Exception('No cameras found on device');
     }
-  }
 
-  Future<void> startImageStream(Function(CameraImage) onFrame) async {
-    if (_isInitialized && _controller != null) {
-      await _controller!.startImageStream(onFrame);
-    }
-  }
-
-  Future<void> stopImageStream() async {
-    if (_isInitialized && _controller != null) {
-      await _controller!.stopImageStream();
-    }
-  }
-
-  Future<void> switchCamera() async {
-    if (_cameras.length < 2) return;
-    final currentCamera = _controller!.description;
-    final newCamera = _cameras.firstWhere(
-      (c) => c != currentCamera,
-      orElse: () => _cameras[0],
+    final frontCameraIndex = _cameras.indexWhere(
+      (camera) => camera.lensDirection == CameraLensDirection.front,
     );
-    await _controller!.dispose();
+
+    _selectedCameraIndex = frontCameraIndex >= 0 ? frontCameraIndex : 0;
+    await _setupCamera(_cameras[_selectedCameraIndex]);
+  }
+
+  Future<void> _setupCamera(CameraDescription camera) async {
+    if (_controller != null) {
+      await _controller!.dispose();
+    }
+
     _controller = CameraController(
-      newCamera,
+      camera,
       ResolutionPreset.medium,
       enableAudio: false,
+      imageFormatGroup: ImageFormatGroup.yuv420,
     );
+
     await _controller!.initialize();
   }
 
+  Future<void> switchCamera() async {
+    if (_cameras.isEmpty || _cameras.length < 2) return;
+
+    final wasStreaming = _isStreamingImages;
+
+    if (wasStreaming) {
+      await stopImageStream();
+    }
+
+    _selectedCameraIndex = (_selectedCameraIndex + 1) % _cameras.length;
+    await _setupCamera(_cameras[_selectedCameraIndex]);
+  }
+
+  Future<void> startImageStream(Function(CameraImage image) onFrame) async {
+    if (_controller == null || !_controller!.value.isInitialized) return;
+    if (_controller!.value.isStreamingImages) return;
+
+    await _controller!.startImageStream((CameraImage image) {
+      onFrame(image);
+    });
+
+    _isStreamingImages = true;
+  }
+
+  Future<void> stopImageStream() async {
+    if (_controller == null || !_controller!.value.isInitialized) return;
+    if (!_controller!.value.isStreamingImages) return;
+
+    await _controller!.stopImageStream();
+    _isStreamingImages = false;
+  }
+
   Future<void> dispose() async {
-    await _controller?.dispose();
-    _isInitialized = false;
+    if (_controller != null) {
+      if (_controller!.value.isStreamingImages) {
+        await _controller!.stopImageStream();
+      }
+      await _controller!.dispose();
+      _controller = null;
+    }
+    _isStreamingImages = false;
   }
 }

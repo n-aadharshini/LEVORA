@@ -4,7 +4,6 @@ import 'package:levora/scaffold_with_nav.dart'; // 👈 add this
 import 'screens/splash_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/communicate_screen.dart';
-import 'screens/sign_speech_screen.dart';
 import 'screens/speech_sign_screen.dart';
 import 'screens/learn_screen.dart';
 import 'screens/emergency_screen.dart';
@@ -35,7 +34,6 @@ final appRouter = GoRouter(
     // No nav bar (detail/sub screens)
     GoRoute(
         path: '/communicate', builder: (_, __) => const CommunicateScreen()),
-    GoRoute(path: '/sign-speech', builder: (_, __) => const SignSpeechScreen()),
     GoRoute(path: '/speech-sign', builder: (_, __) => const SpeechSignScreen()),
     GoRoute(path: '/chat-video', builder: (_, __) => const ChatVideoScreen()),
     GoRoute(
