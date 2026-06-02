@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,44 +7,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'dart:io';
 
 // MODELS
-
-enum MessageType { text, morse }
-
-enum MessageSender { user, caregiver, system }
-
-class ChatMessage {
-  final String text;
-  final String? morsePattern;
-  final MessageType type;
-  final MessageSender sender;
-  final DateTime timestamp;
-
-  ChatMessage({
-    required this.text,
-    this.morsePattern,
-    required this.type,
-    required this.sender,
-    required this.timestamp,
-  });
-}
-
-class Contact {
-  final String name;
-  final String role;
-  final bool online;
-  final String initials;
-  final Color color;
-
-  const Contact({
-    required this.name,
-    required this.role,
-    required this.online,
-    required this.initials,
-    required this.color,
-  });
-}
 
 class ReminderItem {
   final String time;
@@ -84,86 +48,6 @@ class C {
   static const orange = Color(0xFFFF6D00);
 }
 
-// MORSE UTILS
-
-class MorseUtils {
-  static const Map<String, String> _charToMorse = {
-    'A': '● ▬',
-    'B': '▬ ● ● ●',
-    'C': '▬ ● ▬ ●',
-    'D': '▬ ● ●',
-    'E': '●',
-    'F': '● ● ▬ ●',
-    'G': '▬ ▬ ●',
-    'H': '● ● ● ●',
-    'I': '● ●',
-    'J': '● ▬ ▬ ▬',
-    'K': '▬ ● ▬',
-    'L': '● ▬ ● ●',
-    'M': '▬ ▬',
-    'N': '▬ ●',
-    'O': '▬ ▬ ▬',
-    'P': '● ▬ ▬ ●',
-    'Q': '▬ ▬ ● ▬',
-    'R': '● ▬ ●',
-    'S': '● ● ●',
-    'T': '▬',
-    'U': '● ● ▬',
-    'V': '● ● ● ▬',
-    'W': '● ▬ ▬',
-    'X': '▬ ● ● ▬',
-    'Y': '▬ ● ▬ ▬',
-    'Z': '▬ ▬ ● ●',
-  };
-
-  static const Map<String, String> _decode = {
-    '● ● ●': 'S',
-    '▬ ▬ ▬': 'O',
-    '● ▬ ●': 'R',
-    '▬ ● ▬ ●': 'C',
-    '● ●': 'I',
-    '▬ ▬': 'M',
-    '▬ ●': 'N',
-    '● ▬': 'A',
-    '▬': 'T',
-    '●': 'E',
-    '● ▬ ▬': 'W',
-    '▬ ● ●': 'D',
-    '● ● ● ▬ ▬ ▬ ● ● ●': 'SOS',
-  };
-
-  static String textToMorse(String text) {
-    return text
-        .toUpperCase()
-        .split('')
-        .map((c) {
-          if (c == ' ') return '/';
-          return _charToMorse[c] ?? '';
-        })
-        .where((s) => s.isNotEmpty)
-        .join('  ');
-  }
-
-  static String? decodeMorse(String pattern) => _decode[pattern.trim()];
-
-  static const quickMessages = [
-    _QM('SOS', '● ● ● ▬ ▬ ▬ ● ● ●', true),
-    _QM("I'm Safe", '● ▬ ●'),
-    _QM('Call Me', '▬ ● ▬ ●'),
-    _QM('Danger', '● ▬'),
-    _QM('Yes', '● ●'),
-    _QM('No', '▬ ▬ ▬'),
-  ];
-}
-
-class _QM {
-  final String label;
-  final String morse;
-  final bool isSos;
-
-  const _QM(this.label, this.morse, [this.isSos = false]);
-}
-
 // ROOT SCREEN
 
 class CaregiverScreen extends StatefulWidget {
@@ -175,7 +59,6 @@ class CaregiverScreen extends StatefulWidget {
 
 class _CaregiverScreenState extends State<CaregiverScreen>
     with SingleTickerProviderStateMixin {
-  int _tab = 0;
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
@@ -206,11 +89,8 @@ class _CaregiverScreenState extends State<CaregiverScreen>
         child: Column(
           children: [
             _buildTopBar(context),
-            _buildTabNav(),
-            Expanded(
-              child: _tab == 0
-                  ? const _UserInfoTab()
-                  : _ChatTab(pulseAnimation: _pulseAnimation),
+            const Expanded(
+              child: _UserInfoTab(),
             ),
           ],
         ),
@@ -247,7 +127,7 @@ class _CaregiverScreenState extends State<CaregiverScreen>
                   ),
                 ),
                 Text(
-                  'Safety · Morse · AI · Monitoring',
+                  'Safety · AI · Monitoring',
                   style: GoogleFonts.poppins(
                     fontSize: 11,
                     color: C.textSec,
@@ -261,53 +141,6 @@ class _CaregiverScreenState extends State<CaregiverScreen>
       ),
     );
   }
-
-  Widget _buildTabNav() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: C.surface2,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: C.border),
-      ),
-      child: Row(
-        children: [
-          _tabBtn('User Info', 0),
-          _tabBtn('Chat', 1),
-        ],
-      ),
-    );
-  }
-
-  Widget _tabBtn(String label, int idx) => Expanded(
-        child: GestureDetector(
-          onTap: () {
-            HapticFeedback.lightImpact();
-            setState(() => _tab = idx);
-          },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(vertical: 9),
-            decoration: BoxDecoration(
-              color: _tab == idx ? C.blue : Colors.transparent,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: _tab == idx
-                  ? [const BoxShadow(color: Color(0x661565C0), blurRadius: 12)]
-                  : [],
-            ),
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
-                color: _tab == idx ? C.white : C.textMuted,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-      );
 }
 
 class _AnimatedGuardianBadge extends StatelessWidget {
@@ -578,9 +411,13 @@ class _StatCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             value,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
               color: valueColor ?? C.white,
               fontSize: 13,
@@ -590,6 +427,8 @@ class _StatCard extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             label,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
               color: C.textMuted,
               fontSize: 9,
@@ -665,32 +504,49 @@ class _ActCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+      padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 2),
       decoration: BoxDecoration(
         color: C.surface,
         borderRadius: BorderRadius.circular(13),
         border: Border.all(color: C.border2),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(icon, color: iconColor, size: 18),
-          const SizedBox(height: 5),
-          Text(
-            label,
-            style: GoogleFonts.poppins(
-              color: C.textMuted,
-              fontSize: 9,
-              letterSpacing: 0.7,
+          Icon(icon, color: iconColor, size: 16),
+          const SizedBox(height: 4),
+          LayoutBuilder(
+            builder: (context, constraints) => SizedBox(
+              width: constraints.maxWidth,
+              child: Text(
+                label,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                style: GoogleFonts.poppins(
+                  color: C.textMuted,
+                  fontSize: 8,
+                  letterSpacing: 0.3,
+                ),
+              ),
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.poppins(
-              color: C.white,
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
+          const SizedBox(height: 3),
+          LayoutBuilder(
+            builder: (context, constraints) => SizedBox(
+              width: constraints.maxWidth,
+              child: Text(
+                value,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                style: GoogleFonts.poppins(
+                  color: C.white,
+                  fontSize: 9,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ),
           ),
         ],
@@ -802,11 +658,15 @@ class _EmoChip extends StatelessWidget {
         border: Border.all(color: C.border2),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(icon, color: iconColor, size: 16),
           const SizedBox(height: 4),
           Text(
             label,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
               color: C.textMuted,
               fontSize: 9,
@@ -817,6 +677,7 @@ class _EmoChip extends StatelessWidget {
           Text(
             value,
             overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
               color: ok ? C.green : C.yellow,
               fontSize: 10,
@@ -1179,6 +1040,8 @@ class _OrbCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             name,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
               color: C.white,
               fontSize: 11,
@@ -1188,6 +1051,8 @@ class _OrbCard extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             role,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
               color: C.textMuted,
               fontSize: 9,
@@ -1220,22 +1085,25 @@ class _PriorityCascade extends StatelessWidget {
             children: [
               _iconBox(Icons.account_tree_rounded, C.orange),
               const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Alert Cascade Chain',
-                    style: GoogleFonts.poppins(
-                      color: C.white,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Alert Cascade Chain',
+                      style: GoogleFonts.poppins(
+                        color: C.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'No response in 60s → escalates automatically',
-                    style: GoogleFonts.poppins(color: C.textSec, fontSize: 10),
-                  ),
-                ],
+                    Text(
+                      'No response in 60s → escalates automatically',
+                      style:
+                          GoogleFonts.poppins(color: C.textSec, fontSize: 10),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -1555,9 +1423,12 @@ class _BLECardState extends State<_BLECard> {
                 const Icon(Icons.check_circle_rounded,
                     color: C.green, size: 12),
                 const SizedBox(width: 4),
-                Text(
-                  'Last sent: $_lastSent',
-                  style: GoogleFonts.poppins(color: C.green, fontSize: 10),
+                Expanded(
+                  child: Text(
+                    'Last sent: $_lastSent',
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.poppins(color: C.green, fontSize: 10),
+                  ),
                 ),
               ],
             ),
@@ -1641,9 +1512,7 @@ class _RemindersCardState extends State<_RemindersCard> {
   }
 
   void _addReminder() {
-    if (_timeCtrl.text.trim().isEmpty || _labelCtrl.text.trim().isEmpty) {
-      return;
-    }
+    if (_timeCtrl.text.trim().isEmpty || _labelCtrl.text.trim().isEmpty) return;
 
     setState(() {
       _reminders.add(
@@ -1742,12 +1611,9 @@ class _RemindersCardState extends State<_RemindersCard> {
                   Row(
                     children: [
                       Expanded(
-                        child: _inputField(_timeCtrl, 'Time (e.g. 9:00 AM)'),
-                      ),
+                          child: _inputField(_timeCtrl, 'Time (e.g. 9:00 AM)')),
                       const SizedBox(width: 8),
-                      Expanded(
-                        child: _inputField(_labelCtrl, 'Label'),
-                      ),
+                      Expanded(child: _inputField(_labelCtrl, 'Label')),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -1766,9 +1632,7 @@ class _RemindersCardState extends State<_RemindersCard> {
                             onTap: () => setState(() => _selectedMorse = o.$2),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 5,
-                              ),
+                                  horizontal: 10, vertical: 5),
                               decoration: BoxDecoration(
                                 color: _selectedMorse == o.$2
                                     ? C.blue.withOpacity(0.2)
@@ -1884,36 +1748,39 @@ class _RemindersCardState extends State<_RemindersCard> {
               size: 16,
             ),
           ),
-          const SizedBox(width: 10),
-          SizedBox(
-            width: 58,
-            child: Text(
-              item.time,
-              style: GoogleFonts.poppins(
-                color: item.active ? C.white : C.textMuted,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-              ),
+          const SizedBox(width: 8),
+          Text(
+            item.time,
+            style: GoogleFonts.poppins(
+              color: item.active ? C.white : C.textMuted,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
             ),
           ),
+          const SizedBox(width: 6),
           Expanded(
             child: Text(
               item.label,
+              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.poppins(
                 color: item.active ? C.textSec : C.textMuted,
                 fontSize: 11,
               ),
             ),
           ),
-          Text(
-            item.morse,
-            style: GoogleFonts.poppins(
-              color: C.textMuted,
-              fontSize: 9,
-              letterSpacing: 1.5,
+          const SizedBox(width: 4),
+          Flexible(
+            child: Text(
+              item.morse,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: C.textMuted,
+                fontSize: 9,
+                letterSpacing: 1.5,
+              ),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           GestureDetector(
             onTap: () => setState(() => _reminders.removeAt(idx)),
             child: const Icon(Icons.close_rounded, color: C.textDim, size: 14),
@@ -2008,6 +1875,7 @@ class _RepBlock extends StatelessWidget {
               children: [
                 Text(
                   label,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.poppins(
                     color: C.textMuted,
                     fontSize: 8,
@@ -2104,13 +1972,11 @@ class _PdfDownloadButtonState extends State<_PdfDownloadButton> {
             pw.SizedBox(height: 20),
             pw.Header(level: 1, text: 'AI Insights'),
             pw.Bullet(
-              text: 'Normal routine detected. Reaches college by 9:15 AM.',
-            ),
+                text: 'Normal routine detected. Reaches college by 9:15 AM.'),
             pw.Bullet(text: '9 routine alerts suppressed by smart filter.'),
             pw.Bullet(
-              text:
-                  'Unusual 4-min pause near danger zone at 6:42 PM - notified.',
-            ),
+                text:
+                    'Unusual 4-min pause near danger zone at 6:42 PM - notified.'),
             pw.SizedBox(height: 20),
             pw.Text(
               'This report was auto-generated by the Guardian safety system.',
@@ -2221,899 +2087,7 @@ class _PdfDownloadButtonState extends State<_PdfDownloadButton> {
   }
 }
 
-// CHAT TAB
-
-final _contacts = const [
-  Contact(
-    name: 'Mom',
-    role: 'Primary Caregiver',
-    online: true,
-    initials: 'MA',
-    color: C.cyan,
-  ),
-  Contact(
-    name: 'Ravi',
-    role: 'Secondary Caregiver',
-    online: true,
-    initials: 'RK',
-    color: C.blueLight,
-  ),
-  Contact(
-    name: 'Dr. Priya',
-    role: 'Emergency Contact',
-    online: false,
-    initials: 'DP',
-    color: C.purple,
-  ),
-];
-
-class _ChatTab extends StatefulWidget {
-  final Animation<double> pulseAnimation;
-
-  const _ChatTab({required this.pulseAnimation});
-
-  @override
-  State<_ChatTab> createState() => _ChatTabState();
-}
-
-class _ChatTabState extends State<_ChatTab> {
-  Contact? _activeContact;
-
-  @override
-  Widget build(BuildContext context) {
-    if (_activeContact == null) {
-      return _ContactList(
-        onSelect: (c) => setState(() => _activeContact = c),
-      );
-    }
-
-    return _ChatWindow(
-      contact: _activeContact!,
-      pulseAnimation: widget.pulseAnimation,
-      onBack: () => setState(() => _activeContact = null),
-    );
-  }
-}
-
-class _ContactList extends StatelessWidget {
-  final ValueChanged<Contact> onSelect;
-
-  const _ContactList({required this.onSelect});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Text(
-            'Contacts',
-            style: GoogleFonts.poppins(
-              color: C.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-        Expanded(
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            itemCount: _contacts.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 8),
-            itemBuilder: (_, i) {
-              final c = _contacts[i];
-              return GestureDetector(
-                onTap: () => onSelect(c),
-                child: Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: C.surface,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: C.border2),
-                  ),
-                  child: Row(
-                    children: [
-                      Stack(
-                        children: [
-                          Container(
-                            width: 44,
-                            height: 44,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: c.color.withOpacity(0.15),
-                              border: Border.all(
-                                color: c.color.withOpacity(0.35),
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                c.initials,
-                                style: GoogleFonts.poppins(
-                                  color: c.color,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            right: 1,
-                            bottom: 1,
-                            child: Container(
-                              width: 11,
-                              height: 11,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: c.online
-                                    ? C.green
-                                    : const Color(0xFF444444),
-                                border: Border.all(color: C.surface, width: 2),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              c.name,
-                              style: GoogleFonts.poppins(
-                                color: C.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Text(
-                              c.role,
-                              style: GoogleFonts.poppins(
-                                color: C.textMuted,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color:
-                              c.online ? C.green.withOpacity(0.1) : C.surface3,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          c.online ? 'Online' : 'Offline',
-                          style: GoogleFonts.poppins(
-                            color: c.online ? C.green : C.textMuted,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Icon(
-                        Icons.chevron_right_rounded,
-                        color: C.textMuted,
-                        size: 18,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ChatWindow extends StatefulWidget {
-  final Contact contact;
-  final Animation<double> pulseAnimation;
-  final VoidCallback onBack;
-
-  const _ChatWindow({
-    required this.contact,
-    required this.pulseAnimation,
-    required this.onBack,
-  });
-
-  @override
-  State<_ChatWindow> createState() => _ChatWindowState();
-}
-
-class _ChatWindowState extends State<_ChatWindow> {
-  MessageSender _who = MessageSender.user;
-  bool _morseMode = false;
-  final _textCtrl = TextEditingController();
-  final _scrollCtrl = ScrollController();
-  String _taps = '';
-  DateTime? _holdStart;
-
-  late List<ChatMessage> _msgs;
-
-  @override
-  void initState() {
-    super.initState();
-    _msgs = [
-      ChatMessage(
-        text: 'Are you okay? Checking in',
-        morsePattern: '● ▬ ●',
-        type: MessageType.text,
-        sender: MessageSender.caregiver,
-        timestamp: DateTime.now().subtract(const Duration(minutes: 3)),
-      ),
-      ChatMessage(
-        text: "I'm safe, don't worry!",
-        type: MessageType.text,
-        sender: MessageSender.user,
-        timestamp: DateTime.now().subtract(const Duration(minutes: 2)),
-      ),
-      ChatMessage(
-        text: 'Auto check-in: Reached College safely',
-        type: MessageType.text,
-        sender: MessageSender.system,
-        timestamp: DateTime.now().subtract(const Duration(minutes: 1)),
-      ),
-      ChatMessage(
-        text: 'Great! Call me when free',
-        morsePattern: '▬ ● ▬ ●',
-        type: MessageType.text,
-        sender: MessageSender.caregiver,
-        timestamp: DateTime.now(),
-      ),
-    ];
-  }
-
-  @override
-  void dispose() {
-    _textCtrl.dispose();
-    _scrollCtrl.dispose();
-    super.dispose();
-  }
-
-  void _scrollBottom() {
-    Future.delayed(const Duration(milliseconds: 120), () {
-      if (_scrollCtrl.hasClients) {
-        _scrollCtrl.animateTo(
-          _scrollCtrl.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
-    });
-  }
-
-  String _ts(DateTime dt) =>
-      '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
-
-  void _addMsg(ChatMessage m) {
-    setState(() => _msgs.add(m));
-    _scrollBottom();
-  }
-
-  void _sendText() {
-    final txt = _textCtrl.text.trim();
-    if (txt.isEmpty) return;
-
-    _addMsg(
-      ChatMessage(
-        text: txt,
-        morsePattern: MorseUtils.textToMorse(txt),
-        type: MessageType.text,
-        sender: _who,
-        timestamp: DateTime.now(),
-      ),
-    );
-
-    _textCtrl.clear();
-    HapticFeedback.lightImpact();
-
-    if (_who == MessageSender.user) {
-      Future.delayed(
-        const Duration(milliseconds: 900),
-        () => _addMsg(
-          ChatMessage(
-            text: 'Got it! Stay safe',
-            morsePattern: '● ▬  ● ● ●',
-            type: MessageType.text,
-            sender: MessageSender.caregiver,
-            timestamp: DateTime.now(),
-          ),
-        ),
-      );
-    }
-  }
-
-  void _sendMorse(String label, String morse) {
-    _addMsg(
-      ChatMessage(
-        text: label,
-        morsePattern: morse,
-        type: MessageType.morse,
-        sender: _who,
-        timestamp: DateTime.now(),
-      ),
-    );
-
-    _playMorse(morse);
-
-    Future.delayed(
-      const Duration(milliseconds: 700),
-      () => _addMsg(
-        ChatMessage(
-          text: 'Received',
-          morsePattern: '● ▬ ●',
-          type: MessageType.morse,
-          sender: MessageSender.caregiver,
-          timestamp: DateTime.now(),
-        ),
-      ),
-    );
-  }
-
-  void _sendTap() {
-    if (_taps.isEmpty) return;
-    final decoded = MorseUtils.decodeMorse(_taps);
-    _sendMorse(decoded != null ? '"$decoded"' : 'Custom pattern', _taps);
-    setState(() => _taps = '');
-  }
-
-  void _playMorse(String morse) {
-    int delay = 0;
-    for (final s in morse.split(' ')) {
-      Future.delayed(Duration(milliseconds: delay), () {
-        if (s == '●') HapticFeedback.lightImpact();
-        if (s == '▬') HapticFeedback.heavyImpact();
-      });
-      delay += s == '▬' ? 340 : 150;
-    }
-  }
-
-  void _tapDown(TapDownDetails _) => _holdStart = DateTime.now();
-
-  void _tapUp(TapUpDetails _) {
-    if (_holdStart == null) return;
-
-    final ms = DateTime.now().difference(_holdStart!).inMilliseconds;
-    setState(() {
-      _taps += (_taps.isEmpty ? '' : ' ') + (ms > 380 ? '▬' : '●');
-    });
-
-    ms > 380 ? HapticFeedback.heavyImpact() : HapticFeedback.lightImpact();
-    _holdStart = null;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
-          decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: C.border2)),
-          ),
-          child: Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () {
-                  if (context.canPop()) {
-                    context.pop();
-                  } else {
-                    context.go('/home');
-                  }
-                },
-              ),
-              const SizedBox(width: 12),
-              Container(
-                width: 34,
-                height: 34,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: widget.contact.color.withOpacity(0.15),
-                  border:
-                      Border.all(color: widget.contact.color.withOpacity(0.35)),
-                ),
-                child: Center(
-                  child: Text(
-                    widget.contact.initials,
-                    style: GoogleFonts.poppins(
-                      color: widget.contact.color,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.contact.name,
-                      style: GoogleFonts.poppins(
-                        color: C.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 6,
-                          height: 6,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: widget.contact.online
-                                ? C.green
-                                : const Color(0xFF444444),
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          widget.contact.online ? 'Online' : 'Offline',
-                          style: GoogleFonts.poppins(
-                            color:
-                                widget.contact.online ? C.green : C.textMuted,
-                            fontSize: 10,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.info_outline_rounded,
-                  color: C.textMuted, size: 18),
-            ],
-          ),
-        ),
-        Expanded(
-          child: ListView(
-            controller: _scrollCtrl,
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
-            children: [
-              _modeToggle(),
-              ..._msgs.map(_buildMsg),
-            ],
-          ),
-        ),
-        _inputArea(),
-      ],
-    );
-  }
-
-  Widget _whoSelector() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'CHATTING AS',
-          style: GoogleFonts.poppins(
-            color: C.textMuted,
-            fontSize: 10,
-            letterSpacing: 0.6,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 7),
-        Row(
-          children: [
-            Expanded(
-              child: _WhoBtn(
-                label: 'Deaf User',
-                icon: Icons.hearing_disabled_rounded,
-                selected: _who == MessageSender.user,
-                color: C.cyan,
-                onTap: () => setState(() => _who = MessageSender.user),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _WhoBtn(
-                label: 'Caregiver',
-                icon: Icons.people_rounded,
-                selected: _who == MessageSender.caregiver,
-                color: C.blueLight,
-                onTap: () => setState(() => _who = MessageSender.caregiver),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-      ],
-    );
-  }
-
-  Widget _modeToggle() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        color: C.surface2,
-        borderRadius: BorderRadius.circular(11),
-        border: Border.all(color: C.border),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _ModeBtn(
-              label: 'Text',
-              icon: Icons.keyboard_rounded,
-              active: !_morseMode,
-              onTap: () => setState(() => _morseMode = false),
-            ),
-          ),
-          Expanded(
-            child: _ModeBtn(
-              label: 'Morse Tap',
-              icon: Icons.vibration_rounded,
-              active: _morseMode,
-              onTap: () => setState(() => _morseMode = true),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMsg(ChatMessage msg) {
-    if (msg.sender == MessageSender.system) {
-      return Container(
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-            decoration: BoxDecoration(
-              color: C.surface2,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: C.border2),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.check_circle_rounded,
-                    color: C.green, size: 11),
-                const SizedBox(width: 5),
-                Text(
-                  msg.text,
-                  style: GoogleFonts.poppins(color: C.textMuted, fontSize: 10),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
-    final isOut = msg.sender == MessageSender.user;
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: Column(
-        crossAxisAlignment:
-            isOut ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.75,
-            ),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 9),
-              decoration: BoxDecoration(
-                color: isOut ? const Color(0x2D1565C0) : C.surface,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: isOut ? const Color(0x591565C0) : C.border,
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    msg.text,
-                    style: GoogleFonts.poppins(
-                      color: isOut ? const Color(0xFF90CAF9) : C.white,
-                      fontSize: 12,
-                      height: 1.55,
-                    ),
-                  ),
-                  if (msg.morsePattern != null) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      msg.morsePattern!,
-                      style: GoogleFonts.poppins(
-                        color: isOut ? const Color(0x806480FF) : C.textMuted,
-                        fontSize: 9,
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                  ],
-                  if (!isOut && msg.morsePattern != null) ...[
-                    const SizedBox(height: 4),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: const Color(0x1400BCD4),
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: const Color(0x3300BCD4)),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.vibration_rounded,
-                              color: C.cyan, size: 10),
-                          const SizedBox(width: 4),
-                          Text(
-                            'vibrating',
-                            style: GoogleFonts.poppins(
-                              color: C.cyan,
-                              fontSize: 9,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 3),
-          Text(
-            '${isOut ? "You" : widget.contact.name} · ${_ts(msg.timestamp)}',
-            style: GoogleFonts.poppins(color: C.textDim, fontSize: 10),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _inputArea() {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: C.border, width: 0.5)),
-      ),
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
-      child: _morseMode ? _morseInput() : _textInput(),
-    );
-  }
-
-  Widget _textInput() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _textCtrl,
-                onSubmitted: (_) => _sendText(),
-                style: GoogleFonts.poppins(color: C.white, fontSize: 12),
-                decoration: InputDecoration(
-                  hintText: 'Type a message...',
-                  hintStyle: GoogleFonts.poppins(color: C.textMuted),
-                  filled: true,
-                  fillColor: C.surface,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 9,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: C.border),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: C.border),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: C.blue),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 8),
-            GestureDetector(
-              onTap: _sendText,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-                decoration: BoxDecoration(
-                  color: C.blue,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(Icons.send_rounded, color: C.white, size: 16),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 6),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.vibration_rounded, color: C.textMuted, size: 11),
-            const SizedBox(width: 4),
-            Text(
-              'Text auto-converts to morse vibration for receiver',
-              style: GoogleFonts.poppins(color: C.textMuted, fontSize: 10),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _morseInput() {
-    final decoded = MorseUtils.decodeMorse(_taps);
-
-    return Column(
-      children: [
-        Wrap(
-          spacing: 6,
-          runSpacing: 6,
-          children: MorseUtils.quickMessages
-              .map(
-                (q) => GestureDetector(
-                  onTap: () => _sendMorse(q.label, q.morse),
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: q.isSos ? const Color(0x14FF5252) : C.surface,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: q.isSos ? const Color(0x66FF5252) : C.border,
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (q.isSos) ...[
-                          const Icon(Icons.sos_rounded, color: C.red, size: 12),
-                          const SizedBox(width: 4),
-                        ],
-                        Text(
-                          q.label,
-                          style: GoogleFonts.poppins(
-                            color: q.isSos ? C.red : C.textSec,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-              .toList(),
-        ),
-        const SizedBox(height: 10),
-        GestureDetector(
-          onTapDown: _tapDown,
-          onTapUp: _tapUp,
-          onTapCancel: () => _holdStart = null,
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            decoration: BoxDecoration(
-              color: C.surface,
-              borderRadius: BorderRadius.circular(13),
-              border: Border.all(color: C.border),
-            ),
-            child: Column(
-              children: [
-                Text(
-                  _taps.isEmpty ? '· · ·' : _taps,
-                  style: GoogleFonts.poppins(
-                    color: _taps.isEmpty ? C.textMuted : C.cyan,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 4,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.touch_app_rounded,
-                        color: C.textMuted, size: 11),
-                    const SizedBox(width: 4),
-                    Text(
-                      'TAP = dot  ·  HOLD = dash',
-                      style:
-                          GoogleFonts.poppins(color: C.textMuted, fontSize: 10),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          decoded != null ? '→ "$decoded"' : '— tap to compose —',
-          textAlign: TextAlign.center,
-          style: GoogleFonts.poppins(
-            color: decoded != null ? C.cyan : C.textMuted,
-            fontSize: 10,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () => setState(() => _taps = ''),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 9),
-                  decoration: BoxDecoration(
-                    color: C.surface,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: C.border),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.close_rounded,
-                          color: C.textSec, size: 13),
-                      const SizedBox(width: 4),
-                      Text(
-                        'Clear',
-                        style:
-                            GoogleFonts.poppins(color: C.textSec, fontSize: 11),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 6),
-            Expanded(
-              child: GestureDetector(
-                onTap: _sendTap,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 9),
-                  decoration: BoxDecoration(
-                    color: C.blue,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.send_rounded, color: C.white, size: 13),
-                      const SizedBox(width: 4),
-                      Text(
-                        'Send',
-                        style: GoogleFonts.poppins(
-                          color: C.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-// SHARED SMALL WIDGETS
+// SHARED HELPERS
 
 Widget _sectionLabel(String text) {
   return Padding(
@@ -3153,97 +2127,4 @@ Widget _iconBox(IconData icon, Color color) {
     ),
     child: Center(child: Icon(icon, color: color, size: 16)),
   );
-}
-
-class _WhoBtn extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool selected;
-  final Color color;
-  final VoidCallback onTap;
-
-  const _WhoBtn({
-    required this.label,
-    required this.icon,
-    required this.selected,
-    required this.color,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 9),
-        decoration: BoxDecoration(
-          color: selected ? color.withOpacity(0.18) : color.withOpacity(0.06),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: selected ? color.withOpacity(0.6) : color.withOpacity(0.2),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: color, size: 14),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: GoogleFonts.poppins(
-                color: color,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ModeBtn extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool active;
-  final VoidCallback onTap;
-
-  const _ModeBtn({
-    required this.label,
-    required this.icon,
-    required this.active,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(
-          color: active ? C.blue : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: active ? C.white : C.textMuted, size: 13),
-            const SizedBox(width: 5),
-            Text(
-              label,
-              style: GoogleFonts.poppins(
-                color: active ? C.white : C.textMuted,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

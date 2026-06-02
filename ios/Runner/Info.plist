@@ -45,5 +45,48 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<!-- ── Location ─────────────────────────────────────────── -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Levora needs your location to track and assist the user in real time.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Levora needs background location access to monitor the user's safety continuously.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Levora needs always-on location access to alert caregivers when needed.</string>
+
+	<!-- ── Bluetooth ────────────────────────────────────────── -->
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Levora uses Bluetooth to connect to nearby assistive devices.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Levora uses Bluetooth to pair with peripheral devices for accessibility support.</string>
+
+	<!-- ── Camera ───────────────────────────────────────────── -->
+	<key>NSCameraUsageDescription</key>
+	<string>Levora uses the camera for hand gesture recognition and visual assistance.</string>
+
+	<!-- ── Microphone ───────────────────────────────────────── -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Levora uses the microphone to detect sounds and alert the user.</string>
+
+	<!-- ── Motion ───────────────────────────────────────────── -->
+	<key>NSMotionUsageDescription</key>
+	<string>Levora uses motion data to detect falls or sudden movements.</string>
+
+	<!-- ── Photo Library ────────────────────────────────────── -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Levora needs photo library access to save reports and documents.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Levora needs permission to save files to your photo library.</string>
+
+	<!-- ── Background Modes ─────────────────────────────────── -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+		<string>location</string>
+		<string>bluetooth-central</string>
+		<string>audio</string>
+	</array>
+
 </dict>
 </plist>

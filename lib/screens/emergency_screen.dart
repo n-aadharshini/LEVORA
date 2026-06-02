@@ -709,90 +709,88 @@ class _EmergencyScreenState extends State<EmergencyScreen>
   // STATUS ROW
   // ─────────────────────────────────────────────
   Widget _buildStatusRow() {
-    final Color locColor = _currentPosition != null
-        ? const Color(0xFF69F0AE)
-        : _isHoldingSOS
-            ? const Color(0xFFFFD740)
-            : const Color(0xFF6B6B6B);
+    final Color locColor = const Color(0xFF69F0AE);
 
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            decoration: BoxDecoration(
-              color: locColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: locColor.withOpacity(0.3)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _isHoldingSOS && _currentPosition == null
-                    ? SizedBox(
-                        width: 12,
-                        height: 12,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: locColor,
-                        ),
-                      )
-                    : Icon(
-                        _currentPosition != null
-                            ? Icons.gps_fixed
-                            : Icons.gps_off,
-                        color: locColor,
-                        size: 14,
-                      ),
-                const SizedBox(width: 4),
-                Flexible(
-                  child: Text(
-                    _locationLabel,
-                    style: GoogleFonts.poppins(fontSize: 10, color: locColor),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final itemWidth = (constraints.maxWidth - 16) / 3;
+
+        return Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            SizedBox(
+              width: itemWidth,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                decoration: BoxDecoration(
+                  color: locColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: locColor.withOpacity(0.3)),
                 ),
-              ],
+                child: Row(
+                  children: [
+                    const Icon(Icons.gps_fixed,
+                        color: Color(0xFF69F0AE), size: 14),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        'Location On',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style:
+                            GoogleFonts.poppins(fontSize: 10, color: locColor),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ),
-        const SizedBox(width: 8),
-        _buildStatusChip(Icons.sms, 'SMS ready', const Color(0xFF00BCD4)),
-        const SizedBox(width: 8),
-        _buildStatusChip(
-          Icons.contacts,
-          _contactPhone.isNotEmpty ? 'Contact saved' : 'No contact!',
-          _contactPhone.isNotEmpty
-              ? const Color(0xFF7C4DFF)
-              : const Color(0xFFFF5252),
-        ),
-      ],
+            SizedBox(
+              width: itemWidth,
+              child: _buildStatusChip(
+                Icons.sms,
+                'SMS ready',
+                const Color(0xFF00BCD4),
+              ),
+            ),
+            SizedBox(
+              width: itemWidth,
+              child: _buildStatusChip(
+                Icons.contacts,
+                _contactPhone.isNotEmpty ? 'Contact saved' : 'No contact!',
+                _contactPhone.isNotEmpty
+                    ? const Color(0xFF7C4DFF)
+                    : const Color(0xFFFF5252),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
   Widget _buildStatusChip(IconData icon, String label, Color color) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: color.withOpacity(0.3)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: color, size: 14),
-            const SizedBox(width: 4),
-            Flexible(
-              child: Text(
-                label,
-                style: GoogleFonts.poppins(fontSize: 10, color: color),
-                overflow: TextOverflow.ellipsis,
-              ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 14),
+          const SizedBox(width: 4),
+          Expanded(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(fontSize: 10, color: color),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -890,35 +888,44 @@ class _EmergencyScreenState extends State<EmergencyScreen>
           ),
         ),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(
-              child: _buildQuickAlertButton(
-                Icons.flashlight_on,
-                _torchOn ? 'Flash ON' : 'Flash SOS',
-                const Color(0xFF00BCD4),
-                onTap: _toggleTorch,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _buildQuickAlertButton(
-                Icons.my_location,
-                'Share Location',
-                const Color(0xFF69F0AE),
-                onTap: _openGoogleMaps,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _buildQuickAlertButton(
-                Icons.phone,
-                'Call Contact',
-                const Color(0xFF7C4DFF),
-                onTap: () => _callNumber(_contactPhone),
-              ),
-            ),
-          ],
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final itemWidth = (constraints.maxWidth - 16) / 3;
+
+            return Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                SizedBox(
+                  width: itemWidth,
+                  child: _buildQuickAlertButton(
+                    Icons.flashlight_on,
+                    _torchOn ? 'Flash ON' : 'Flash SOS',
+                    const Color(0xFF00BCD4),
+                    onTap: _toggleTorch,
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _buildQuickAlertButton(
+                    Icons.my_location,
+                    'Location',
+                    const Color(0xFF69F0AE),
+                    onTap: _openGoogleMaps,
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _buildQuickAlertButton(
+                    Icons.phone,
+                    'Call',
+                    const Color(0xFF7C4DFF),
+                    onTap: () => _callNumber(_contactPhone),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ],
     );
@@ -936,20 +943,28 @@ class _EmergencyScreenState extends State<EmergencyScreen>
         onTap();
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
         decoration: BoxDecoration(
           color: color.withOpacity(0.1),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: color.withOpacity(0.3)),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: color, size: 22),
+            Icon(icon, color: color, size: 20),
             const SizedBox(height: 6),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(fontSize: 11, color: color),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                style: GoogleFonts.poppins(
+                  fontSize: 10,
+                  color: color,
+                ),
+              ),
             ),
           ],
         ),
@@ -1493,6 +1508,7 @@ class _EmergencyScreenState extends State<EmergencyScreen>
   Widget _infoRow(String label, String value) => Padding(
         padding: const EdgeInsets.only(bottom: 8),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               width: 90,
@@ -1504,12 +1520,16 @@ class _EmergencyScreenState extends State<EmergencyScreen>
                 ),
               ),
             ),
-            Text(
-              value,
-              style: GoogleFonts.poppins(
-                fontSize: 14,
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
+            Expanded(
+              // ← ADD THIS
+              child: Text(
+                value,
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+                softWrap: true, // ← allows wrapping onto next line
               ),
             ),
           ],

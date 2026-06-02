@@ -64,13 +64,10 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
   Future<void> _init() async {
     await _initTts();
     await _gestureService.loadModel();
-
     final granted = await _permissionService.requestCamera(context);
     if (granted) {
       await _cameraService.initialize();
-      if (mounted) {
-        setState(() {});
-      }
+      if (mounted) setState(() {});
     }
   }
 
@@ -83,32 +80,17 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
   }
 
   Future<void> _startGestureStream() async {
-    setState(() {
-      _debugStatus = 'Stream started';
-    });
-
+    setState(() => _debugStatus = 'Stream started');
     await _cameraService.startImageStream((image) async {
-      if (mounted) {
-        setState(() {
-          _debugStatus = 'Frame callback';
-        });
-      }
-
+      if (mounted) setState(() => _debugStatus = 'Frame callback');
       if (_isProcessingFrame) return;
-
       _frameSkipCount++;
       if (_frameSkipCount % 3 != 0) return;
-
       _isProcessingFrame = true;
-
       try {
         await _handleCameraFrame(image);
       } catch (_) {
-        if (mounted) {
-          setState(() {
-            _debugStatus = 'Frame error';
-          });
-        }
+        if (mounted) setState(() => _debugStatus = 'Frame error');
       } finally {
         _isProcessingFrame = false;
       }
@@ -118,41 +100,25 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
   Future<void> _handleCameraFrame(CameraImage image) async {
     final controller = _cameraService.controller;
     if (controller == null) return;
-
-    final camera = controller.description;
-
     final gestureName = await _gestureService.detectGestureFromFrame(
-      image,
-      camera,
-    );
-
-    if (mounted) {
-      setState(() {
-        _debugStatus = 'Gesture: ${gestureName ?? "none"}';
-      });
-    }
-
+        image, controller.description);
+    if (mounted)
+      setState(() => _debugStatus = 'Gesture: ${gestureName ?? "none"}');
     if (gestureName == null) return;
-
     final detectedText = _gestureService.mapGestureToText(gestureName);
     if (detectedText == null) return;
-
     await _onGestureDetected(detectedText);
   }
 
   Future<void> _speakSubtitle(String text) async {
     if (!_ttsEnabled || _isMuted || text.isEmpty) return;
     if (_lastSpokenText == text) return;
-
     _lastSpokenText = text;
     await _flutterTts.stop();
     await _flutterTts.setLanguage(_languages[_languageIndex]['code']!);
     await _flutterTts.speak(text);
-
     Future.delayed(const Duration(seconds: 2), () {
-      if (mounted && _lastSpokenText == text) {
-        _lastSpokenText = '';
-      }
+      if (mounted && _lastSpokenText == text) _lastSpokenText = '';
     });
   }
 
@@ -164,111 +130,75 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
   }
 
   Future<void> _changeLanguage() async {
-    setState(() {
-      _languageIndex = (_languageIndex + 1) % _languages.length;
-    });
-
+    setState(() => _languageIndex = (_languageIndex + 1) % _languages.length);
     await _flutterTts.setLanguage(_languages[_languageIndex]['code']!);
-
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Language switched to ${_languages[_languageIndex]['label']}',
-          ),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content:
+            Text('Language switched to ${_languages[_languageIndex]['label']}'),
+      ));
     }
   }
 
   void _toggleMute() {
-    setState(() {
-      _isMuted = !_isMuted;
-    });
-
-    if (_isMuted) {
-      _flutterTts.stop();
-    }
+    setState(() => _isMuted = !_isMuted);
+    if (_isMuted) _flutterTts.stop();
   }
 
-  void _toggleCaptions() {
-    setState(() {
-      _captionsEnabled = !_captionsEnabled;
-    });
-  }
+  void _toggleCaptions() =>
+      setState(() => _captionsEnabled = !_captionsEnabled);
 
-  void _swapVideoViews() {
-    setState(() {
-      _showLocalAsMain = !_showLocalAsMain;
-    });
-  }
+  void _swapVideoViews() =>
+      setState(() => _showLocalAsMain = !_showLocalAsMain);
 
   void _addSubtitle(String text) {
-    final now = TimeOfDay.now();
-    final timeLabel = now.format(context);
-
+    final timeLabel = TimeOfDay.now().format(context);
     setState(() {
       _currentSubtitle = text;
-      _subtitles.insert(0, {
-        'text': text,
-        'time': timeLabel,
-      });
-
-      if (_subtitles.length > 8) {
-        _subtitles.removeLast();
-      }
-
+      _subtitles.insert(0, {'text': text, 'time': timeLabel});
+      if (_subtitles.length > 8) _subtitles.removeLast();
       _suggestions = _suggestionMap[text] ?? ['Please repeat'];
     });
   }
 
   void _appendToSentence(String word) {
     setState(() {
-      if (_sentence.isEmpty) {
-        _sentence = word;
-      } else {
-        _sentence = '$_sentence $word';
-      }
+      _sentence = _sentence.isEmpty ? word : '$_sentence $word';
     });
   }
 
   void _removeLastWord() {
     if (_sentence.trim().isEmpty) return;
-
-    final words = _sentence.trim().split(' ');
-    words.removeLast();
-
-    setState(() {
-      _sentence = words.join(' ');
-    });
+    final words = _sentence.trim().split(' ')..removeLast();
+    setState(() => _sentence = words.join(' '));
   }
 
-  void _clearSentence() {
-    setState(() {
-      _sentence = '';
-    });
-  }
+  void _clearSentence() => setState(() => _sentence = '');
 
   Future<void> _onGestureDetected(String gestureText) async {
-    if (gestureText.isEmpty) return;
-    if (_lastDetectedGesture == gestureText) return;
-
+    if (gestureText.isEmpty || _lastDetectedGesture == gestureText) return;
     _lastDetectedGesture = gestureText;
     _addSubtitle(gestureText);
     _appendToSentence(gestureText);
     await _speakSubtitle(gestureText);
-
     Future.delayed(const Duration(seconds: 2), () {
-      if (mounted && _lastDetectedGesture == gestureText) {
+      if (mounted && _lastDetectedGesture == gestureText)
         _lastDetectedGesture = '';
-      }
     });
   }
 
   Future<void> _switchCamera() async {
     await _cameraService.switchCamera();
-    if (mounted) {
-      setState(() {});
+    if (mounted) setState(() {});
+  }
+
+  void _goBack() {
+    _cameraService.stopImageStream();
+    _flutterTts.stop();
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/home');
     }
   }
 
@@ -285,15 +215,12 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) {
-        if (!didPop) context.go('/home');
-      },
+      canPop: true, // allow back gesture/button to pop normally
       child: Scaffold(
         backgroundColor: const Color(0xFF0A0A0A),
         appBar: _buildAppBar(),
         body: _buildVideoCallTab(),
-        bottomNavigationBar: _buildBottomNav(1),
+        // ✅ No bottomNavigationBar — ScaffoldWithNav is NOT wrapping this screen
       ),
     );
   }
@@ -305,16 +232,10 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
       automaticallyImplyLeading: false,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back, color: Colors.white),
-        onPressed: () {
-          if (context.canPop()) {
-            context.pop();
-          } else {
-            context.go('/home');
-          }
-        },
+        onPressed: _goBack,
       ),
       title: Text(
-        'Communicate',
+        'Video Call',
         style: GoogleFonts.poppins(
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -327,10 +248,8 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
           onPressed: _changeLanguage,
         ),
         IconButton(
-          icon: const Icon(
-            Icons.flip_camera_android_outlined,
-            color: Colors.white,
-          ),
+          icon: const Icon(Icons.flip_camera_android_outlined,
+              color: Colors.white),
           onPressed: _switchCamera,
         ),
       ],
@@ -355,29 +274,21 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
               color: const Color(0xFF00BCD4).withOpacity(0.12),
               shape: BoxShape.circle,
             ),
-            child: const Icon(
-              Icons.videocam,
-              color: Color(0xFF00BCD4),
-              size: 36,
-            ),
+            child:
+                const Icon(Icons.videocam, color: Color(0xFF00BCD4), size: 36),
           ),
           const SizedBox(height: 16),
           Text(
             'Video Call with Sign Captions',
             style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
           Text(
             'Real-time gesture subtitles with speech output',
             style: GoogleFonts.poppins(
-              fontSize: 13,
-              color: const Color(0xFFB0BEC5),
-            ),
+                fontSize: 13, color: const Color(0xFFB0BEC5)),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
@@ -395,14 +306,9 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
                 border: InputBorder.none,
                 hintText: 'Enter room code (optional)',
                 hintStyle: GoogleFonts.poppins(
-                  color: const Color(0xFF6B6B6B),
-                  fontSize: 14,
-                ),
-                suffixIcon: const Icon(
-                  Icons.login_outlined,
-                  color: Color(0xFF00BCD4),
-                  size: 20,
-                ),
+                    color: const Color(0xFF6B6B6B), fontSize: 14),
+                suffixIcon: const Icon(Icons.login_outlined,
+                    color: Color(0xFF00BCD4), size: 20),
               ),
             ),
           ),
@@ -425,14 +331,11 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
                 children: [
                   const Icon(Icons.videocam, color: Colors.white, size: 20),
                   const SizedBox(width: 10),
-                  Text(
-                    'Start Video Call',
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
+                  Text('Start Video Call',
+                      style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white)),
                 ],
               ),
             ),
@@ -446,16 +349,8 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
     return Stack(
       children: [
         Positioned.fill(child: _buildMainVideoView()),
-        Positioned(
-          top: 16,
-          right: 16,
-          child: _buildMiniVideoView(),
-        ),
-        Positioned(
-          top: 16,
-          left: 16,
-          child: _buildStatusChip(),
-        ),
+        Positioned(top: 16, right: 16, child: _buildMiniVideoView()),
+        Positioned(top: 16, left: 16, child: _buildStatusChip()),
         Positioned(
           bottom: 84,
           left: 16,
@@ -483,14 +378,9 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
   }
 
   Widget _buildMainVideoView() {
-    if (_showLocalAsMain) {
-      return _buildLocalCameraView();
-    }
-
+    if (_showLocalAsMain) return _buildLocalCameraView();
     return _buildRemoteVideoPlaceholder(
-      label: 'Opposite Video',
-      subtitle: 'Remote participant view',
-    );
+        label: 'Opposite Video', subtitle: 'Remote participant view');
   }
 
   Widget _buildMiniVideoView() {
@@ -505,25 +395,19 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
         decoration: BoxDecoration(
           color: const Color(0xFF1A1A1A),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: const Color(0xFF00BCD4).withOpacity(0.5),
-          ),
+          border: Border.all(color: const Color(0xFF00BCD4).withOpacity(0.5)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.25),
-              blurRadius: 12,
-              offset: const Offset(0, 6),
-            ),
+                color: Colors.black.withOpacity(0.25),
+                blurRadius: 12,
+                offset: const Offset(0, 6))
           ],
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(14),
           child: _showLocalAsMain
               ? _buildRemoteVideoPlaceholder(
-                  label: 'Opposite',
-                  subtitle: 'Tap to swap',
-                  isMini: true,
-                )
+                  label: 'Opposite', subtitle: 'Tap to swap', isMini: true)
               : _buildLocalCameraView(),
         ),
       ),
@@ -536,12 +420,8 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
       child: _cameraService.isInitialized
           ? CameraPreviewWidget(controller: _cameraService.controller!)
           : const Center(
-              child: Icon(
-                Icons.camera_alt,
-                color: Color(0xFF6B6B6B),
-                size: 28,
-              ),
-            ),
+              child:
+                  Icon(Icons.camera_alt, color: Color(0xFF6B6B6B), size: 28)),
     );
   }
 
@@ -563,7 +443,6 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
           padding: const EdgeInsets.all(8),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 width: isMini ? 48 : 92,
@@ -572,38 +451,28 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
                   shape: BoxShape.circle,
                   color: const Color(0xFF00BCD4).withOpacity(0.14),
                   border: Border.all(
-                    color: const Color(0xFF00BCD4).withOpacity(0.35),
-                  ),
+                      color: const Color(0xFF00BCD4).withOpacity(0.35)),
                 ),
-                child: Icon(
-                  Icons.person,
-                  color: const Color(0xFF00BCD4),
-                  size: isMini ? 24 : 46,
-                ),
+                child: Icon(Icons.person,
+                    color: const Color(0xFF00BCD4), size: isMini ? 24 : 46),
               ),
               SizedBox(height: isMini ? 8 : 14),
-              Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  fontSize: isMini ? 11 : 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
+              Text(label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      fontSize: isMini ? 11 : 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white)),
               SizedBox(height: isMini ? 2 : 4),
-              Text(
-                subtitle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  fontSize: isMini ? 9 : 13,
-                  color: const Color(0xFF8E9BA1),
-                ),
-              ),
+              Text(subtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      fontSize: isMini ? 9 : 13,
+                      color: const Color(0xFF8E9BA1))),
             ],
           ),
         ),
@@ -623,23 +492,19 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 7,
-            height: 7,
-            decoration: const BoxDecoration(
-              color: Color(0xFF4CAF50),
-              shape: BoxShape.circle,
-            ),
-          ),
+              width: 7,
+              height: 7,
+              decoration: const BoxDecoration(
+                  color: Color(0xFF4CAF50), shape: BoxShape.circle)),
           const SizedBox(width: 8),
           Flexible(
             child: Text(
               '${_languages[_languageIndex]['label']} • $_debugStatus',
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500),
             ),
           ),
         ],
@@ -660,15 +525,12 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'LIVE CAPTIONS',
-            style: GoogleFonts.poppins(
-              fontSize: 10,
-              color: const Color(0xFFFF5252),
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.0,
-            ),
-          ),
+          Text('LIVE CAPTIONS',
+              style: GoogleFonts.poppins(
+                  fontSize: 10,
+                  color: const Color(0xFFFF5252),
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.0)),
           const SizedBox(height: 10),
           if (_currentSubtitle.isNotEmpty)
             Container(
@@ -678,36 +540,23 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
                 color: const Color(0xFF00BCD4).withOpacity(0.16),
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: Text(
-                _currentSubtitle,
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
+              child: Text(_currentSubtitle,
+                  style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white)),
             ),
           if (_subtitles.isEmpty)
-            Text(
-              'Detected gestures will appear here...',
-              style: GoogleFonts.poppins(
-                fontSize: 13,
-                color: const Color(0xFF9A9A9A),
-              ),
-            )
+            Text('Detected gestures will appear here...',
+                style: GoogleFonts.poppins(
+                    fontSize: 13, color: const Color(0xFF9A9A9A)))
           else
-            ..._subtitles.take(3).map(
-                  (subtitle) => Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: Text(
-                      '${subtitle['text']}  •  ${subtitle['time']}',
+            ..._subtitles.take(3).map((subtitle) => Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Text('${subtitle['text']}  •  ${subtitle['time']}',
                       style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
+                          fontSize: 14, color: Colors.white)),
+                )),
         ],
       ),
     );
@@ -725,50 +574,38 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'SENTENCE',
-            style: GoogleFonts.poppins(
-              fontSize: 10,
-              color: const Color(0xFF00BCD4),
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1,
-            ),
-          ),
+          Text('SENTENCE',
+              style: GoogleFonts.poppins(
+                  fontSize: 10,
+                  color: const Color(0xFF00BCD4),
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1)),
           const SizedBox(height: 8),
           Text(
             _sentence.isEmpty ? 'Your sentence will appear here...' : _sentence,
             style: GoogleFonts.poppins(
-              fontSize: 16,
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            ),
+                fontSize: 16, color: Colors.white, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 10),
           Row(
             children: [
               Expanded(
-                child: _buildSentenceActionButton(
-                  label: 'Speak',
-                  icon: Icons.volume_up,
-                  onTap: _speakSentence,
-                ),
-              ),
+                  child: _buildSentenceActionButton(
+                      label: 'Speak',
+                      icon: Icons.volume_up,
+                      onTap: _speakSentence)),
               const SizedBox(width: 8),
               Expanded(
-                child: _buildSentenceActionButton(
-                  label: 'Back',
-                  icon: Icons.backspace_outlined,
-                  onTap: _removeLastWord,
-                ),
-              ),
+                  child: _buildSentenceActionButton(
+                      label: 'Back',
+                      icon: Icons.backspace_outlined,
+                      onTap: _removeLastWord)),
               const SizedBox(width: 8),
               Expanded(
-                child: _buildSentenceActionButton(
-                  label: 'Clear',
-                  icon: Icons.delete_outline,
-                  onTap: _clearSentence,
-                ),
-              ),
+                  child: _buildSentenceActionButton(
+                      label: 'Clear',
+                      icon: Icons.delete_outline,
+                      onTap: _clearSentence)),
             ],
           ),
         ],
@@ -798,14 +635,11 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
           children: [
             Icon(icon, color: Colors.white, size: 16),
             const SizedBox(width: 6),
-            Text(
-              label,
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            Text(label,
+                style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500)),
           ],
         ),
       ),
@@ -814,7 +648,6 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
 
   Widget _buildSuggestionsRow() {
     if (_suggestions.isEmpty) return const SizedBox.shrink();
-
     return SizedBox(
       height: 42,
       child: ListView.separated(
@@ -826,9 +659,7 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
           return GestureDetector(
             onTap: () async {
               HapticFeedback.selectionClick();
-              setState(() {
-                _sentence = suggestion;
-              });
+              setState(() => _sentence = suggestion);
               await _speakSentence();
             },
             child: Container(
@@ -837,18 +668,14 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
                 color: const Color(0xFF1C1C1C),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: const Color(0xFF00BCD4).withOpacity(0.35),
-                ),
+                    color: const Color(0xFF00BCD4).withOpacity(0.35)),
               ),
               child: Center(
-                child: Text(
-                  suggestion,
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                child: Text(suggestion,
+                    style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500)),
               ),
             ),
           );
@@ -859,7 +686,6 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
 
   Widget _buildDemoGestureBar() {
     final demoGestures = ['Yes', 'Wait', 'Stop'];
-
     return SizedBox(
       height: 38,
       child: ListView.separated(
@@ -881,13 +707,9 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
                 border: Border.all(color: Colors.white.withOpacity(0.08)),
               ),
               child: Center(
-                child: Text(
-                  gesture,
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 12,
-                  ),
-                ),
+                child: Text(gesture,
+                    style:
+                        GoogleFonts.poppins(color: Colors.white, fontSize: 12)),
               ),
             ),
           );
@@ -906,28 +728,22 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
           _toggleMute,
         ),
         _buildCallButton(
-          Icons.flip_camera_android,
-          const Color(0xFF1A1A1A),
-          _switchCamera,
-        ),
-        _buildCallButton(
-          Icons.call_end,
-          const Color(0xFFFF5252),
-          () {
-            _cameraService.stopImageStream();
-            setState(() {
-              _inCall = false;
-              _subtitles.clear();
-              _currentSubtitle = '';
-              _lastDetectedGesture = '';
-              _lastSpokenText = '';
-              _suggestions = [];
-              _sentence = '';
-              _debugStatus = 'Idle';
-            });
-            _flutterTts.stop();
-          },
-        ),
+            Icons.flip_camera_android, const Color(0xFF1A1A1A), _switchCamera),
+        // End call → stop stream and go back to chat
+        _buildCallButton(Icons.call_end, const Color(0xFFFF5252), () {
+          _cameraService.stopImageStream();
+          _flutterTts.stop();
+          setState(() {
+            _inCall = false;
+            _subtitles.clear();
+            _currentSubtitle = '';
+            _lastDetectedGesture = '';
+            _lastSpokenText = '';
+            _suggestions = [];
+            _sentence = '';
+            _debugStatus = 'Idle';
+          });
+        }),
         _buildCallButton(
           _captionsEnabled
               ? Icons.closed_caption
@@ -936,10 +752,7 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
           _toggleCaptions,
         ),
         _buildCallButton(
-          Icons.swap_horiz,
-          const Color(0xFF1A1A1A),
-          _swapVideoViews,
-        ),
+            Icons.swap_horiz, const Color(0xFF1A1A1A), _swapVideoViews),
       ],
     );
   }
@@ -953,106 +766,8 @@ class _CommunicateScreenState extends State<CommunicateScreen> {
       child: Container(
         width: 54,
         height: 54,
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-        ),
+        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         child: Icon(icon, color: Colors.white, size: 22),
-      ),
-    );
-  }
-
-  Widget _buildBottomNav(int activeIndex) {
-    return Container(
-      height: 70,
-      decoration: const BoxDecoration(
-        color: Color(0xFF0F0F0F),
-        border: Border(top: BorderSide(color: Color(0xFF2A2A2A), width: 1)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(
-            Icons.home_outlined,
-            'Home',
-            activeIndex == 0,
-            () => context.go('/home'),
-          ),
-          _buildNavItem(
-            Icons.sign_language_outlined,
-            'Sign',
-            activeIndex == 1,
-            () {},
-          ),
-          _buildNavItem(
-            Icons.menu_book_outlined,
-            'Learn',
-            activeIndex == 2,
-            () => context.go('/learn'),
-          ),
-          _buildNavItem(
-            Icons.emergency_outlined,
-            'SOS',
-            activeIndex == 3,
-            () => context.go('/emergency'),
-            color: const Color(0xFFFF5252),
-          ),
-          _buildNavItem(
-            Icons.person_outline,
-            'Profile',
-            activeIndex == 4,
-            () => context.go('/profile'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(
-    IconData icon,
-    String label,
-    bool isActive,
-    VoidCallback onTap, {
-    Color? color,
-  }) {
-    final activeColor = color ?? const Color(0xFF00BCD4);
-
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        onTap();
-      },
-      child: SizedBox(
-        width: 64,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              color: isActive ? activeColor : const Color(0xFF6B6B6B),
-              size: 24,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: GoogleFonts.poppins(
-                fontSize: 10,
-                color: isActive ? activeColor : const Color(0xFF6B6B6B),
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-              ),
-            ),
-            const SizedBox(height: 3),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              width: isActive ? 4 : 0,
-              height: isActive ? 4 : 0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: activeColor,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

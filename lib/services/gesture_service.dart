@@ -42,10 +42,11 @@ class GestureService {
     final wrist = landmarks[0];
 
     final thumbTip = landmarks[4];
-    final thumbIp = landmarks[3];
+    final thumbMcp = landmarks[2];
 
     final indexTip = landmarks[8];
     final indexPip = landmarks[6];
+    final indexMcp = landmarks[5];
 
     final middleTip = landmarks[12];
     final middlePip = landmarks[10];
@@ -55,40 +56,58 @@ class GestureService {
 
     final pinkyTip = landmarks[20];
     final pinkyPip = landmarks[18];
+    final pinkyMcp = landmarks[17];
 
     final indexUp = indexTip.y < indexPip.y;
     final middleUp = middleTip.y < middlePip.y;
     final ringUp = ringTip.y < ringPip.y;
     final pinkyUp = pinkyTip.y < pinkyPip.y;
 
-    final raisedCount = [
-      indexUp,
-      middleUp,
-      ringUp,
-      pinkyUp,
-    ].where((v) => v).length;
+    final indexFolded = !indexUp;
+    final middleFolded = !middleUp;
+    final ringFolded = !ringUp;
+    final pinkyFolded = !pinkyUp;
 
-    // Selfie camera thumbs-up:
-    // thumb is above wrist and all other fingers are folded
-    final thumbClearlyUp =
-        thumbTip.y < thumbIp.y && thumbTip.y < wrist.y && raisedCount == 0;
+    final raisedCount =
+        [indexUp, middleUp, ringUp, pinkyUp].where((v) => v).length;
+
+    double dist(dynamic a, dynamic b) {
+      final dx = (a.x as num).toDouble() - (b.x as num).toDouble();
+      final dy = (a.y as num).toDouble() - (b.y as num).toDouble();
+      return (dx * dx + dy * dy) * 1.0;
+    }
+
+    final thumbFarFromPalm =
+        dist(thumbTip, indexMcp) > dist(thumbMcp, indexMcp);
+    final thumbSeparated = dist(thumbTip, pinkyMcp) > 0.03;
+
+    final thumbsUpLike = indexFolded &&
+        middleFolded &&
+        ringFolded &&
+        pinkyFolded &&
+        thumbFarFromPalm;
+
+    final iLoveYouLike =
+        indexUp && !middleUp && !ringUp && pinkyUp && thumbSeparated;
 
     debugPrint(
-      'index:$indexUp middle:$middleUp ring:$ringUp pinky:$pinkyUp raised:$raisedCount thumbUp:$thumbClearlyUp',
+      'thumbFar:$thumbFarFromPalm thumbSep:$thumbSeparated '
+      'index:$indexUp middle:$middleUp ring:$ringUp pinky:$pinkyUp',
     );
 
-    // Peace sign
+    if (iLoveYouLike) {
+      return 'i_love_you';
+    }
+
     if (indexUp && middleUp && !ringUp && !pinkyUp) {
       return 'peace';
     }
 
-    // Open palm
     if (raisedCount >= 3) {
       return 'open_palm';
     }
 
-    // Thumbs up
-    if (thumbClearlyUp) {
+    if (thumbsUpLike) {
       return 'thumbs_up';
     }
 
@@ -103,6 +122,8 @@ class GestureService {
         return 'Stop';
       case 'peace':
         return 'Wait';
+      case 'i_love_you':
+        return 'I love you';
       default:
         return null;
     }

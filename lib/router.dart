@@ -1,15 +1,15 @@
 import 'package:go_router/go_router.dart';
 import 'package:levora/screens/caregiver_mode.dart';
-import 'package:levora/scaffold_with_nav.dart'; // 👈 add this
+import 'package:levora/scaffold_with_nav.dart';
 import 'screens/splash_screen.dart';
 import 'screens/home_screen.dart';
-import 'screens/communicate_screen.dart';
 import 'screens/speech_sign_screen.dart';
 import 'screens/learn_screen.dart';
 import 'screens/emergency_screen.dart';
-import 'screens/chat_video_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/sound_textures_screen.dart';
+import 'screens/chat_list_screen.dart';
+import 'screens/individual_chat_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
@@ -17,7 +17,7 @@ final appRouter = GoRouter(
     // No nav bar
     GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
 
-    // With nav bar (ShellRoute wraps these)
+    // With nav bar
     ShellRoute(
       builder: (context, state, child) => ScaffoldWithNav(child: child),
       routes: [
@@ -33,9 +33,15 @@ final appRouter = GoRouter(
 
     // No nav bar (detail/sub screens)
     GoRoute(
-        path: '/communicate', builder: (_, __) => const CommunicateScreen()),
+      path: '/chat/:id',
+      builder: (context, state) {
+        final contact = state.extra as ChatContact;
+        return IndividualChatScreen(contact: contact);
+      },
+    ),
+    GoRoute(path: '/communicate', builder: (_, __) => const ChatListScreen()),
+    GoRoute(path: '/sign-call', builder: (_, __) => const ChatListScreen()),
     GoRoute(path: '/speech-sign', builder: (_, __) => const SpeechSignScreen()),
-    GoRoute(path: '/chat-video', builder: (_, __) => const ChatVideoScreen()),
     GoRoute(
         path: '/sound-textures',
         builder: (_, __) => const SoundTexturesScreen()),

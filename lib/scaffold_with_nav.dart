@@ -34,7 +34,7 @@ class ScaffoldWithNav extends StatelessWidget {
         children: [
           _buildNavItem(context, Icons.home_outlined, 'Home', activeIndex == 0,
               () => context.go('/home')),
-          _buildNavItem(context, Icons.family_restroom_outlined, 'Caregiver',
+          _buildNavItem(context, Icons.supervisor_account_outlined, 'Caregiver',
               activeIndex == 1, () => context.go('/caregiver')),
           _buildNavItem(context, Icons.menu_book_outlined, 'Learn',
               activeIndex == 2, () => context.go('/learn')),

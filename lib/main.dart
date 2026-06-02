@@ -3,18 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'router.dart';
-import 'services/sound_detection_service.dart'; // ← your YAMNet service file
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Lock to portrait mode
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  // Set status bar style
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -22,14 +19,8 @@ void main() async {
     ),
   );
 
-  // Initialize Firebase
   await Firebase.initializeApp();
-
-  // Request mic permission
   await Permission.microphone.request();
-
-  // Load YAMNet model
-  await SoundDetectionService.instance.loadModel();
 
   runApp(const LevoraApp());
 }
